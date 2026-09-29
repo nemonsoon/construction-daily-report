@@ -1,3 +1,9 @@
+import { Steps } from "./Steps.tsx";
+
 export function App() {
-	return <main>工事日報の転記チェック</main>;
+	return (
+		<main>
+			<Steps />
+		</main>
+	);
 }
