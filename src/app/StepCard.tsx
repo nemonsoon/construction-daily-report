@@ -20,7 +20,7 @@ export function StepNumber({
 			)}
 		>
 			{mark === "done" ? (
-				<Check aria-label="終わった段" className="size-5" />
+				<Check role="img" aria-label="終わった段" className="size-5" />
 			) : (
 				number
 			)}

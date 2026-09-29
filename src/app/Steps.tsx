@@ -38,7 +38,11 @@ function Notice({
 	children: ReactNode;
 }) {
 	return (
-		<div role="status" className={`rounded-xl px-4 py-3 ${TONES[tone]}`}>
+		// 読めなかった知らせは、読み上げの途中でも割り込んで伝える
+		<div
+			role={tone === "error" ? "alert" : "status"}
+			className={`rounded-xl px-4 py-3 ${TONES[tone]}`}
+		>
 			{tone === "done" ? (
 				<div className="flex items-start gap-2">
 					<CircleCheck
