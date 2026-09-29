@@ -1,10 +1,9 @@
 import {
 	CircleCheck,
 	Download,
-	FileCheck,
 	FileSpreadsheet,
+	LayoutTemplate,
 	Loader2,
-	Upload,
 } from "lucide-react";
 import { type ReactNode, useEffect, useReducer } from "react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +21,7 @@ import {
 	stepMarks,
 } from "./flow.ts";
 import { StepCard } from "./StepCard.tsx";
+import { Stepper } from "./Stepper.tsx";
 import { HEADING_ID } from "./screen.ts";
 
 const TONES = {
@@ -99,7 +99,8 @@ function Loading() {
 
 export function Steps() {
 	const [state, dispatch] = useReducer(flowReducer, initialFlow);
-	const [sampleMark, checkMark, reportMark] = stepMarks(state);
+	const marks = stepMarks(state);
+	const [sampleMark, checkMark, reportMark] = marks;
 	const busy = isBusy(state);
 
 	// 受け取り枠の外にファイルを落とすと、ブラウザがそのファイルを開いてページが消えるため止める
@@ -149,32 +150,28 @@ export function Steps() {
 	}
 
 	return (
-		<section className="border-y border-line bg-surface">
-			<div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+		<div className="min-h-[calc(100dvh-4rem)] bg-surface">
+			<div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
 				<h1
 					id={HEADING_ID.app}
 					tabIndex={-1}
-					className="text-2xl font-bold tracking-tight outline-none sm:text-3xl"
+					className="text-center text-3xl font-bold tracking-tight outline-none sm:text-4xl"
 				>
 					見本で試す
 				</h1>
-				<p className="mt-3 text-muted-foreground">
-					3段で終わります。手元の日報の Excel でも試せます。
+				<p className="mt-3 text-center text-muted-foreground">
+					手元の日報の Excel でも試せます。
 				</p>
+				<div className="mt-8">
+					<Stepper marks={marks} />
+				</div>
 
-				<ol className="mt-10 space-y-6">
-					<StepCard
-						number={1}
-						title="見本の日報を手に入れる"
-						icon={FileSpreadsheet}
-						mark={sampleMark}
-					>
-						<p>
-							手元に日報が無ければ、書き間違いを9か所仕込んだ見本を使ってください。
-						</p>
-						<Button onClick={takeSample} size="lg">
+				<ol className="mt-8 space-y-6">
+					<StepCard number={1} title="見本の日報を手に入れる" mark={sampleMark}>
+						<p>書き間違いを9か所仕込んだ見本です。</p>
+						<Button onClick={takeSample} className="h-11 px-5 text-base">
 							<Download aria-hidden />
-							見本の Excel をダウンロード
+							見本をダウンロード
 						</Button>
 						{state.sampleTaken && (
 							<Notice tone="done">
@@ -183,15 +180,10 @@ export function Steps() {
 						)}
 					</StepCard>
 
-					<StepCard
-						number={2}
-						title="日報の Excel を置く"
-						icon={Upload}
-						mark={checkMark}
-					>
+					<StepCard number={2} title="日報の Excel を置く" mark={checkMark}>
 						<p>
-							書き忘れや食い違いのあるセルを黄色く塗り、「指摘」の列に理由を書いた
-							<b> 要確認.xlsx </b>をダウンロードします。
+							書き忘れや食い違いのセルを黄色くした <b>要確認.xlsx</b>{" "}
+							をダウンロードします。
 						</p>
 						<FileDrop
 							id="check-file"
@@ -223,9 +215,7 @@ export function Steps() {
 					<StepCard
 						number={3}
 						title="直した要確認.xlsx を置く"
-						icon={FileCheck}
 						mark={reportMark}
-						last
 					>
 						<p>
 							指摘が残っていなければ、<b>日報.xlsx</b> と <b>集計表.xlsx</b>{" "}
@@ -257,7 +247,18 @@ export function Steps() {
 						)}
 					</StepCard>
 				</ol>
+
+				{state.report.kind === "done" && (
+					<p className="mt-8 flex items-center justify-center gap-2 text-muted-foreground">
+						<LayoutTemplate
+							aria-hidden
+							className="size-5 shrink-0"
+							strokeWidth={1.75}
+						/>
+						御社の様式に合わせて作れます。
+					</p>
+				)}
 			</div>
-		</section>
+		</div>
 	);
 }

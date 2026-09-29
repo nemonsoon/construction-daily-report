@@ -1,4 +1,4 @@
-import { FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, Upload } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -27,16 +27,30 @@ export function FileDrop({ id, label, disabled, onFile }: Props) {
 				if (file && !disabled) onFile(file);
 			}}
 			className={cn(
-				"flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed border-line bg-white px-6 py-8 text-center transition-colors",
-				"hover:border-ink/40 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2",
-				over && "border-ink bg-surface",
+				"flex cursor-pointer flex-col gap-4 rounded-xl border-2 border-dashed border-line bg-surface p-5 transition-colors sm:flex-row sm:items-center",
+				"hover:border-brand/50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2",
+				over && "border-brand bg-brand-soft",
 				disabled && "cursor-wait opacity-60",
 			)}
 		>
-			<FileSpreadsheet aria-hidden className="size-8 text-muted-foreground" />
-			<span className="font-medium">{label}</span>
-			<span className="text-sm text-muted-foreground">
-				ここにファイルを置くか、クリックして選ぶ（.xlsx）
+			<FileSpreadsheet
+				aria-hidden
+				className="size-8 shrink-0 text-muted-foreground"
+				strokeWidth={1.5}
+			/>
+			<span className="min-w-0 flex-1">
+				<span className="block font-bold">{label}</span>
+				<span className="block text-sm text-muted-foreground">
+					ここに置くか、ボタンから選ぶ（.xlsx）
+				</span>
+			</span>
+			{/* 見た目だけのボタン。押すと label 全体が input を開く */}
+			<span
+				aria-hidden="true"
+				className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 font-medium text-primary-foreground"
+			>
+				<Upload className="size-5" />
+				ファイルを選ぶ
 			</span>
 			<input
 				id={id}
