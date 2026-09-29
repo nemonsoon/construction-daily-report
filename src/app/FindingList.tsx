@@ -1,20 +1,62 @@
-import { type Finding, formatFinding } from "../finding.ts";
+import type { ReactNode } from "react";
+import type { Finding } from "../finding.ts";
 
-export function FindingList({ findings }: { findings: Finding[] }) {
+type Props = {
+	title: ReactNode;
+	findings: Finding[];
+};
+
+export function FindingList({ title, findings }: Props) {
 	return (
-		<ul className="mt-3 max-h-64 space-y-1 overflow-y-auto rounded-lg border border-hogan bg-white p-3 text-sm tabular-nums">
-			{findings.map((finding) => (
-				<li
-					key={`${finding.rowNumber}-${finding.column}-${finding.message}`}
-					className="flex gap-2"
-				>
-					<span
-						aria-hidden
-						className="mt-1.5 size-2.5 shrink-0 rounded-sm bg-caution"
-					/>
-					<span>{formatFinding(finding)}</span>
-				</li>
-			))}
-		</ul>
+		<div className="overflow-hidden rounded-xl border border-hogan bg-white">
+			<p className="flex items-center gap-2 border-b border-hogan px-4 py-3 font-bold">
+				<span aria-hidden className="size-2.5 shrink-0 rounded-sm bg-caution" />
+				{title}
+			</p>
+			<div className="max-h-72 overflow-y-auto">
+				<table className="w-full text-sm tabular-nums">
+					<thead className="sticky top-0 bg-yacho text-left text-muted-foreground">
+						<tr>
+							<th
+								scope="col"
+								className="w-12 py-2 pr-2 pl-4 font-medium sm:w-14"
+							>
+								行
+							</th>
+							{/* スマートフォン幅では項目の列を消し、指摘の文の上に出す（指摘の列が押しつぶされるため） */}
+							<th
+								scope="col"
+								className="hidden w-28 px-4 py-2 font-medium sm:table-cell"
+							>
+								項目
+							</th>
+							<th scope="col" className="py-2 pr-4 pl-2 font-medium sm:px-4">
+								指摘
+							</th>
+						</tr>
+					</thead>
+					<tbody className="divide-y divide-hogan">
+						{findings.map((finding) => (
+							<tr
+								key={`${finding.rowNumber}-${finding.column}-${finding.message}`}
+							>
+								<td className="py-2 pr-2 pl-4 align-top">
+									{finding.rowNumber}
+								</td>
+								<td className="hidden px-4 py-2 align-top whitespace-nowrap sm:table-cell">
+									{finding.column}
+								</td>
+								<td className="py-2 pr-4 pl-2 sm:px-4">
+									<span className="block text-xs text-muted-foreground sm:hidden">
+										{finding.column}
+									</span>
+									{finding.message}
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	);
 }

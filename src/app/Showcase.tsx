@@ -29,7 +29,7 @@ export function Showcase() {
 							src={src}
 							alt={alt}
 							loading="lazy"
-							className="w-full rounded-xl border border-hogan bg-white shadow-sm"
+							className="w-full rounded-2xl border border-hogan bg-white shadow-sm"
 						/>
 						<figcaption className="mt-3 text-sm text-muted-foreground">
 							{caption}

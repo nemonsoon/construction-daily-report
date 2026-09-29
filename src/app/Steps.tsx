@@ -1,4 +1,11 @@
-import { Download, Loader2 } from "lucide-react";
+import {
+	CircleCheck,
+	Download,
+	FileCheck,
+	FileSpreadsheet,
+	Loader2,
+	Upload,
+} from "lucide-react";
 import { type ReactNode, useEffect, useReducer } from "react";
 import { Button } from "@/components/ui/button";
 import { runCheck, runReport } from "../pipeline.ts";
@@ -17,10 +24,9 @@ import {
 import { StepCard } from "./StepCard.tsx";
 
 const TONES = {
-	caution: "border-caution bg-caution-soft",
-	done: "border-tape bg-tape-soft",
-	error: "border-destructive/40 bg-destructive/5 text-destructive",
-	plain: "border-hogan bg-white",
+	done: "bg-tape-soft",
+	error: "border-l-4 border-destructive/40 bg-destructive/5 text-destructive",
+	plain: "border border-hogan bg-white",
 };
 
 function Notice({
@@ -31,12 +37,48 @@ function Notice({
 	children: ReactNode;
 }) {
 	return (
-		<div
-			role="status"
-			className={`rounded-md border-l-4 px-4 py-3 ${TONES[tone]}`}
-		>
-			{children}
+		<div role="status" className={`rounded-xl px-4 py-3 ${TONES[tone]}`}>
+			{tone === "done" ? (
+				<div className="flex items-start gap-2">
+					<CircleCheck
+						aria-hidden
+						className="mt-0.5 size-5 shrink-0 text-tape"
+					/>
+					<div className="min-w-0 flex-1 space-y-3">{children}</div>
+				</div>
+			) : (
+				children
+			)}
 		</div>
+	);
+}
+
+// ファイルはもうダウンロード済みなので、押せる見た目にはしない
+const OUTPUTS = [
+	{ name: "日報.xlsx", note: "1日・1現場ごとに1枚のシート" },
+	{ name: "集計表.xlsx", note: "延べ人数と作業時間の合計" },
+];
+
+function Outputs() {
+	return (
+		<ul className="grid gap-3 sm:grid-cols-2">
+			{OUTPUTS.map(({ name, note }) => (
+				<li
+					key={name}
+					className="flex items-center gap-3 rounded-lg bg-white px-4 py-3"
+				>
+					<FileSpreadsheet
+						aria-hidden
+						className="size-6 shrink-0"
+						strokeWidth={1.75}
+					/>
+					<span>
+						<span className="block font-bold">{name}</span>
+						<span className="block text-sm text-muted-foreground">{note}</span>
+					</span>
+				</li>
+			))}
+		</ul>
 	);
 }
 
@@ -110,7 +152,7 @@ export function Steps() {
 			id="try"
 			className="scroll-mt-6 border-y border-hogan bg-hogan-grid"
 		>
-			<div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+			<div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
 				<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
 					見本で試す
 				</h2>
@@ -119,7 +161,12 @@ export function Steps() {
 				</p>
 
 				<ol className="mt-10 space-y-6">
-					<StepCard number={1} title="見本の日報を手に入れる" mark={sampleMark}>
+					<StepCard
+						number={1}
+						title="見本の日報を手に入れる"
+						icon={FileSpreadsheet}
+						mark={sampleMark}
+					>
 						<p>
 							手元に日報が無ければ、書き間違いを9か所仕込んだ見本を使ってください。
 						</p>
@@ -134,7 +181,12 @@ export function Steps() {
 						)}
 					</StepCard>
 
-					<StepCard number={2} title="日報の Excel を置く" mark={checkMark}>
+					<StepCard
+						number={2}
+						title="日報の Excel を置く"
+						icon={Upload}
+						mark={checkMark}
+					>
 						<p>
 							書き忘れや食い違いのあるセルを黄色く塗り、「指摘」の列に理由を書いた
 							<b> 要確認.xlsx </b>をダウンロードします。
@@ -156,18 +208,22 @@ export function Steps() {
 							</Notice>
 						)}
 						{state.check.kind === "found" && (
-							<Notice tone="caution">
-								確かめてほしい所が {state.check.findings.length}{" "}
-								か所あります。要確認.xlsx の黄色いセルを直して保存してください。
-								<FindingList findings={state.check.findings} />
-							</Notice>
+							<div role="status" className="space-y-3">
+								<FindingList
+									title={`確かめてほしい所が ${state.check.findings.length} か所あります`}
+									findings={state.check.findings}
+								/>
+								<p>要確認.xlsx の黄色いセルを直して保存してください。</p>
+							</div>
 						)}
 					</StepCard>
 
 					<StepCard
 						number={3}
 						title="直した要確認.xlsx を置く"
+						icon={FileCheck}
 						mark={reportMark}
+						last
 					>
 						<p>
 							指摘が残っていなければ、<b>日報.xlsx</b> と <b>集計表.xlsx</b>{" "}
@@ -184,15 +240,17 @@ export function Steps() {
 							<Notice tone="error">{state.report.message}</Notice>
 						)}
 						{state.report.kind === "remaining" && (
-							<Notice tone="caution">
-								まだ {state.report.findings.length}{" "}
-								か所が残っているため、日報と集計表は作りませんでした。
-								<FindingList findings={state.report.findings} />
-							</Notice>
+							<div role="status">
+								<FindingList
+									title={`まだ ${state.report.findings.length} か所が残っているため、日報と集計表は作りませんでした`}
+									findings={state.report.findings}
+								/>
+							</div>
 						)}
 						{state.report.kind === "done" && (
 							<Notice tone="done">
-								日報.xlsx と集計表.xlsx をダウンロードしました。
+								<p>日報.xlsx と集計表.xlsx をダウンロードしました。</p>
+								<Outputs />
 							</Notice>
 						)}
 					</StepCard>
