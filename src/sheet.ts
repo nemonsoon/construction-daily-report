@@ -55,3 +55,19 @@ export function setStyle(
 ): void {
 	cell.style = { ...cell.style, ...patch };
 }
+
+export function ensureColumn(
+	sheet: ExcelJS.Worksheet,
+	header: string,
+	width: number,
+): number {
+	const columns = findColumns(sheet);
+	const existing = columns.get(header);
+	if (existing !== undefined) return existing;
+	const column = Math.max(0, ...columns.values()) + 1;
+	const cell = sheet.getCell(1, column);
+	cell.value = header;
+	setStyle(cell, { font: { bold: true } });
+	sheet.getColumn(column).width = width;
+	return column;
+}

@@ -12,3 +12,5 @@ export const INPUT_COLUMNS = [
 ] as const;
 
 export type ColumnName = (typeof INPUT_COLUMNS)[number];
+
+export const REVIEW_COLUMN = "指摘";

@@ -38,3 +38,10 @@ export function workRow(overrides: Partial<WorkRow> = {}): WorkRow {
 		...overrides,
 	};
 }
+
+export function fillColor(cell: ExcelJS.Cell): string | undefined {
+	const fill = cell.fill as ExcelJS.Fill | undefined;
+	return fill?.type === "pattern" && fill.pattern === "solid"
+		? fill.fgColor?.argb
+		: undefined;
+}
