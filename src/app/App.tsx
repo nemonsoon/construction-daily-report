@@ -1,9 +1,15 @@
+import { Hero } from "./Hero.tsx";
+import { Pains } from "./Pains.tsx";
 import { Steps } from "./Steps.tsx";
 
 export function App() {
 	return (
-		<main>
-			<Steps />
-		</main>
+		<>
+			<Hero />
+			<main>
+				<Pains />
+				<Steps />
+			</main>
+		</>
 	);
 }
