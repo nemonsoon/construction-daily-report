@@ -164,15 +164,19 @@ export function Steps() {
 					見本で試す
 				</h1>
 				<p className="mt-3 text-center text-muted-foreground">
-					手元の日報の Excel でも試せます。
+					上から順に進めると、最後に日報と集計表のExcelが手に入ります。
 				</p>
 				<div className="mt-8">
 					<Stepper marks={marks} />
 				</div>
 
 				<ol className="mt-8 space-y-6">
-					<StepCard number={1} title="見本の日報を手に入れる" mark={sampleMark}>
-						<p>書き間違いを9か所仕込んだ見本です。</p>
+					<StepCard
+						number={1}
+						title="見本の日報をダウンロードする"
+						mark={sampleMark}
+					>
+						<p>書き忘れや食い違いを9か所入れた、練習用の日報です。</p>
 						<Button onClick={takeSample} className="h-11 px-5 text-base">
 							<Download aria-hidden />
 							見本をダウンロード
@@ -184,14 +188,14 @@ export function Steps() {
 						)}
 					</StepCard>
 
-					<StepCard number={2} title="日報の Excel を置く" mark={checkMark}>
+					<StepCard number={2} title="書き忘れを確かめる" mark={checkMark}>
 						<p>
-							書き忘れや食い違いのセルを黄色くした <b>要確認.xlsx</b>{" "}
-							をダウンロードします。
+							日報を読み込むと、直してほしいセルを黄色く塗った{" "}
+							<b>要確認.xlsx</b> が届きます。
 						</p>
 						<FileDrop
 							id="check-file"
-							label="日報の Excel"
+							label="日報のExcelを読み込む"
 							disabled={busy}
 							onFile={check}
 						/>
@@ -216,18 +220,14 @@ export function Steps() {
 						)}
 					</StepCard>
 
-					<StepCard
-						number={3}
-						title="直した要確認.xlsx を置く"
-						mark={reportMark}
-					>
+					<StepCard number={3} title="日報と集計表にまとめる" mark={reportMark}>
 						<p>
-							指摘が残っていなければ、<b>日報.xlsx</b> と <b>集計表.xlsx</b>{" "}
-							をダウンロードします。
+							直した要確認.xlsx を読み込むと、<b>日報.xlsx</b> と{" "}
+							<b>集計表.xlsx</b> が届きます。
 						</p>
 						<FileDrop
 							id="report-file"
-							label="直した要確認.xlsx"
+							label="直したExcelを読み込む"
 							disabled={busy}
 							onFile={report}
 						/>

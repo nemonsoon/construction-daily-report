@@ -4,9 +4,9 @@ import { StepNumber } from "./StepCard.tsx";
 
 // スマートフォン幅では短い名前にする（3つを横に並べると、長い名前は折り返して読みにくいため）
 const LABELS = [
-	{ full: "見本の日報を手に入れる", short: "見本を手に入れる" },
-	{ full: "日報の Excel を置く", short: "日報を置く" },
-	{ full: "直した要確認.xlsx を置く", short: "直したものを置く" },
+	{ full: "見本の日報をダウンロードする", short: "見本を入手" },
+	{ full: "書き忘れを確かめる", short: "確かめる" },
+	{ full: "日報と集計表にまとめる", short: "まとめる" },
 ];
 
 export function Stepper({ marks }: { marks: [StepMark, StepMark, StepMark] }) {
