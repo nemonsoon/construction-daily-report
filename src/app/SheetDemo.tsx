@@ -1,4 +1,4 @@
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
@@ -67,7 +67,10 @@ export function SheetDemo() {
 			<figcaption className="sr-only">
 				工事日報の表で、現場名の空欄・読めない開始時刻・開始より前の終了時刻のセルが黄色く示され、決まった様式の日報に組み上がる見本
 			</figcaption>
-			<div aria-hidden className="space-y-3">
+			<div
+				aria-hidden
+				className="grid gap-3 lg:grid-cols-[1.4fr_auto_1fr] lg:items-center"
+			>
 				<div className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
 					<div className="flex items-center gap-2 border-b border-line bg-surface px-3 py-2">
 						<span className="rounded-md bg-ink px-3 py-0.5 text-xs font-medium text-white">
@@ -78,7 +81,7 @@ export function SheetDemo() {
 						</span>
 					</div>
 					<div className="overflow-x-auto">
-						<table className="w-full text-xs tabular-nums sm:text-sm">
+						<table className="w-full text-xs tabular-nums sm:text-sm lg:text-xs">
 							<thead>
 								<tr className="bg-surface/60 text-left">
 									{HEADERS.map(([key, label]) => (
@@ -131,13 +134,20 @@ export function SheetDemo() {
 				</div>
 
 				<ArrowDown
-					className={cn("mx-auto size-5 text-muted-foreground", APPEAR)}
+					className={cn(
+						"mx-auto size-5 text-muted-foreground lg:hidden",
+						APPEAR,
+					)}
+					style={delay(3.0)}
+				/>
+				<ArrowRight
+					className={cn("hidden size-5 text-muted-foreground lg:block", APPEAR)}
 					style={delay(3.0)}
 				/>
 
 				<div
 					className={cn(
-						"ml-auto w-[88%] rounded-2xl border border-line bg-white p-4 text-xs tabular-nums shadow-sm sm:text-sm",
+						"ml-auto w-[88%] rounded-2xl border border-line bg-white p-4 text-xs tabular-nums shadow-sm sm:text-sm lg:ml-0 lg:w-full lg:text-xs",
 						"animate-in fade-in zoom-in-95 duration-500 fill-mode-backwards motion-reduce:animate-none",
 					)}
 					style={delay(3.3)}
