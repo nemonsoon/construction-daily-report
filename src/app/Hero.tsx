@@ -1,4 +1,4 @@
-import { SheetDemo } from "./SheetDemo.tsx";
+import { HeroDocuments } from "./HeroDocuments.tsx";
 import { HEADING_ID } from "./screen.ts";
 import { TryButton } from "./TryButton.tsx";
 
@@ -27,7 +27,7 @@ export function Hero() {
 			</div>
 			{/* スマートフォン幅では見出しのすぐ下に置き、最初の画面に製品を入れる */}
 			<div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center">
-				<SheetDemo />
+				<HeroDocuments />
 			</div>
 			<TryButton className="lg:self-start" />
 		</section>

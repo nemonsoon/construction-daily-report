@@ -81,14 +81,3 @@
 		word-break: auto-phrase;
 	}
 }
-
-/* 最後の形（黄色）を要素の地の色に置き、始まりだけを透明にする。動きを止めても黄色が残る */
-@keyframes flag-cell {
-	from {
-		background-color: transparent;
-	}
-}
-
-@utility animate-flag {
-	animation: flag-cell 0.6s ease-out backwards;
-}
