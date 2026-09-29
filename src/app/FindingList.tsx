@@ -8,14 +8,14 @@ type Props = {
 
 export function FindingList({ title, findings }: Props) {
 	return (
-		<div className="overflow-hidden rounded-xl border border-hogan bg-white">
-			<p className="flex items-center gap-2 border-b border-hogan px-4 py-3 font-bold">
+		<div className="overflow-hidden rounded-xl border border-line bg-white">
+			<p className="flex items-center gap-2 border-b border-line px-4 py-3 font-bold">
 				<span aria-hidden className="size-2.5 shrink-0 rounded-sm bg-caution" />
 				{title}
 			</p>
 			<div className="max-h-72 overflow-y-auto">
 				<table className="w-full text-sm tabular-nums">
-					<thead className="sticky top-0 bg-yacho text-left text-muted-foreground">
+					<thead className="sticky top-0 bg-surface text-left text-muted-foreground">
 						<tr>
 							<th
 								scope="col"
@@ -35,7 +35,7 @@ export function FindingList({ title, findings }: Props) {
 							</th>
 						</tr>
 					</thead>
-					<tbody className="divide-y divide-hogan">
+					<tbody className="divide-y divide-line">
 						{findings.map((finding) => (
 							<tr
 								key={`${finding.rowNumber}-${finding.column}-${finding.message}`}

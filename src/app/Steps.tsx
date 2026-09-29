@@ -26,7 +26,7 @@ import { StepCard } from "./StepCard.tsx";
 const TONES = {
 	done: "bg-tape-soft",
 	error: "border-l-4 border-destructive/40 bg-destructive/5 text-destructive",
-	plain: "border border-hogan bg-white",
+	plain: "border border-line bg-white",
 };
 
 function Notice({
@@ -148,10 +148,7 @@ export function Steps() {
 	}
 
 	return (
-		<section
-			id="try"
-			className="scroll-mt-6 border-y border-hogan bg-hogan-grid"
-		>
+		<section id="try" className="scroll-mt-6 border-y border-line bg-surface">
 			<div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
 				<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
 					見本で試す

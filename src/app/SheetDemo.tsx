@@ -68,9 +68,9 @@ export function SheetDemo() {
 				工事日報の表で、現場名の空欄・読めない開始時刻・開始より前の終了時刻のセルが黄色く示され、決まった様式の日報に組み上がる見本
 			</figcaption>
 			<div aria-hidden className="space-y-3">
-				<div className="overflow-hidden rounded-2xl border border-hogan bg-white shadow-sm">
-					<div className="flex items-center gap-2 border-b border-hogan bg-yacho px-3 py-2">
-						<span className="rounded-md bg-sumi px-3 py-0.5 text-xs font-medium text-white">
+				<div className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
+					<div className="flex items-center gap-2 border-b border-line bg-surface px-3 py-2">
+						<span className="rounded-md bg-ink px-3 py-0.5 text-xs font-medium text-white">
 							工事日報
 						</span>
 						<span className="text-xs text-muted-foreground">
@@ -80,11 +80,11 @@ export function SheetDemo() {
 					<div className="overflow-x-auto">
 						<table className="w-full text-xs tabular-nums sm:text-sm">
 							<thead>
-								<tr className="bg-yacho/60 text-left">
+								<tr className="bg-surface/60 text-left">
 									{HEADERS.map(([key, label]) => (
 										<th
 											key={key}
-											className="border-b border-r border-hogan px-2 py-1.5 font-bold whitespace-nowrap last:border-r-0"
+											className="border-b border-r border-line px-2 py-1.5 font-bold whitespace-nowrap last:border-r-0"
 										>
 											{label}
 										</th>
@@ -102,7 +102,7 @@ export function SheetDemo() {
 											<td
 												key={key}
 												className={cn(
-													"border-b border-r border-hogan px-2 py-1.5 whitespace-nowrap last:border-r-0",
+													"border-b border-r border-line px-2 py-1.5 whitespace-nowrap last:border-r-0",
 													(key === "start" || key === "end") && "text-right",
 													row.flagged === key &&
 														"animate-flag bg-caution motion-reduce:animate-none",
@@ -137,20 +137,20 @@ export function SheetDemo() {
 
 				<div
 					className={cn(
-						"ml-auto w-[88%] rounded-2xl border border-hogan bg-white p-4 text-xs tabular-nums shadow-sm sm:text-sm",
+						"ml-auto w-[88%] rounded-2xl border border-line bg-white p-4 text-xs tabular-nums shadow-sm sm:text-sm",
 						"animate-in fade-in zoom-in-95 duration-500 fill-mode-backwards motion-reduce:animate-none",
 					)}
 					style={delay(3.3)}
 				>
 					<p className="text-center text-base font-bold">工事日報</p>
-					<div className="mt-2 flex justify-between gap-2 border-b border-hogan pb-1">
+					<div className="mt-2 flex justify-between gap-2 border-b border-line pb-1">
 						<span>2026-09-01　駅前店舗 改装工事</span>
 						<span className="whitespace-nowrap">天候 晴</span>
 					</div>
 					<table className="mt-1 w-full">
 						<tbody>
 							{REPORT_ROWS.map(([worker, start, end, hours]) => (
-								<tr key={worker} className="border-b border-hogan">
+								<tr key={worker} className="border-b border-line">
 									<td className="py-1">{worker}</td>
 									<td className="text-right">{start}</td>
 									<td className="text-right">{end}</td>

@@ -14,7 +14,7 @@ export function App() {
 				<Showcase />
 				<Details />
 			</main>
-			<footer className="border-t border-hogan">
+			<footer className="border-t border-line">
 				<div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 text-sm text-muted-foreground sm:flex-row sm:justify-between sm:px-6">
 					<p>この試作品は架空のデータだけを使っています。</p>
 					<p>

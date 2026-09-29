@@ -60,7 +60,7 @@ const FITTING = [
 
 export function Details() {
 	return (
-		<section className="border-t border-hogan bg-white">
+		<section className="border-t border-line bg-white">
 			<div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
 				<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
 					見つける書き忘れや食い違い
@@ -73,7 +73,7 @@ export function Details() {
 					{CHECKS.map(({ icon: Icon, title, body, examples }) => (
 						<article
 							key={title}
-							className="rounded-2xl border border-hogan bg-yacho p-6"
+							className="rounded-2xl border border-line bg-surface p-6"
 						>
 							<Icon aria-hidden className="size-7" strokeWidth={1.75} />
 							<h3 className="mt-4 text-lg font-bold">{title}</h3>

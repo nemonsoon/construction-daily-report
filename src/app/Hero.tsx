@@ -41,7 +41,7 @@ export function Hero() {
 				</div>
 				<SheetDemo />
 			</div>
-			<ul className="mt-14 grid gap-6 md:grid-cols-3 md:gap-0 md:divide-x md:divide-hogan">
+			<ul className="mt-14 grid gap-6 md:grid-cols-3 md:gap-0 md:divide-x md:divide-line">
 				{PROMISES.map(({ icon: Icon, lead, text }) => (
 					<li
 						key={lead}

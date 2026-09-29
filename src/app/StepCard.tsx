@@ -29,15 +29,15 @@ export function StepCard({
 				// 番号の丸の下から次の段の丸までを点線でつなぐ（ol の space-y-6 の分だけ下へ伸ばす）
 				<span
 					aria-hidden
-					className="absolute top-12 -bottom-4 left-5 border-l-2 border-dashed border-hogan"
+					className="absolute top-12 -bottom-4 left-5 border-l-2 border-dashed border-line"
 				/>
 			)}
 			<span
 				className={cn(
 					"relative flex size-10 items-center justify-center rounded-full border-2 text-lg font-bold tabular-nums",
 					mark === "done" && "border-tape bg-tape text-white",
-					mark === "current" && "border-sumi bg-sumi text-white",
-					mark === "todo" && "border-hogan bg-white text-muted-foreground",
+					mark === "current" && "border-ink bg-ink text-white",
+					mark === "todo" && "border-line bg-white text-muted-foreground",
 				)}
 			>
 				{mark === "done" ? (
@@ -49,7 +49,7 @@ export function StepCard({
 			<div
 				className={cn(
 					"flex flex-col gap-4 rounded-2xl border bg-card p-5 shadow-sm sm:flex-row sm:gap-6 sm:p-7",
-					mark === "current" ? "border-sumi/30" : "border-hogan",
+					mark === "current" ? "border-ink/30" : "border-line",
 				)}
 			>
 				<Icon aria-hidden className="size-7 shrink-0" strokeWidth={1.75} />

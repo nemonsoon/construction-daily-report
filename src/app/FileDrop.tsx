@@ -27,9 +27,9 @@ export function FileDrop({ id, label, disabled, onFile }: Props) {
 				if (file && !disabled) onFile(file);
 			}}
 			className={cn(
-				"flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed border-hogan bg-white px-6 py-8 text-center transition-colors",
-				"hover:border-sumi/40 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2",
-				over && "border-sumi bg-yacho",
+				"flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed border-line bg-white px-6 py-8 text-center transition-colors",
+				"hover:border-ink/40 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2",
+				over && "border-ink bg-surface",
 				disabled && "cursor-wait opacity-60",
 			)}
 		>

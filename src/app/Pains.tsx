@@ -24,7 +24,7 @@ export function Pains() {
 			<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
 				減らすのは、書き写しと足し上げの手間
 			</h2>
-			<ul className="mt-10 divide-y divide-hogan rounded-2xl border border-hogan bg-white">
+			<ul className="mt-10 divide-y divide-line rounded-2xl border border-line bg-white">
 				{PAIRS.map(({ icon: Icon, before, after }) => (
 					<li
 						key={before}
