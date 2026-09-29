@@ -19,7 +19,9 @@ const SHOTS = [
 export function Showcase() {
 	return (
 		<section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-			<h2 className="font-display text-3xl sm:text-4xl">出来上がり</h2>
+			<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+				出来上がり
+			</h2>
 			<div className="mt-10 grid gap-8 md:grid-cols-[1.5fr_1fr]">
 				{SHOTS.map(({ src, alt, caption }) => (
 					<figure key={src}>

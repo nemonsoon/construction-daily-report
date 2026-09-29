@@ -6,9 +6,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-	--font-display: "Dela Gothic One", sans-serif;
-	--font-sans: "Zen Kaku Gothic New", system-ui, sans-serif;
-	--font-cell: "BIZ UDGothic", sans-serif;
+	--font-sans: "Noto Sans JP Variable", system-ui, sans-serif;
 	--color-sumi: #1f2a2e;
 	--color-yacho: #f4f6f3;
 	--color-hogan: #d9ded6;

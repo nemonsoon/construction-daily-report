@@ -111,7 +111,9 @@ export function Steps() {
 			className="scroll-mt-6 border-y border-hogan bg-hogan-grid"
 		>
 			<div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
-				<h2 className="font-display text-3xl sm:text-4xl">見本で試す</h2>
+				<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+					見本で試す
+				</h2>
 				<p className="mt-3 text-muted-foreground">
 					3段で終わります。手元の日報の Excel でも試せます。
 				</p>

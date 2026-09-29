@@ -18,7 +18,7 @@ const PAIRS = [
 export function Pains() {
 	return (
 		<section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-			<h2 className="font-display text-3xl sm:text-4xl">
+			<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
 				減らすのは、書き写しと足し上げの手間
 			</h2>
 			<div className="mt-10 hidden grid-cols-[1fr_2rem_1fr] gap-4 text-sm font-bold text-muted-foreground md:grid">

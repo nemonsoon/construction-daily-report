@@ -18,7 +18,7 @@ export function Hero() {
 				<p className="text-sm font-medium tracking-wide text-muted-foreground">
 					建設業の工事日報向けの試作品
 				</p>
-				<h1 className="mt-4 font-display text-4xl leading-tight sm:text-5xl">
+				<h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
 					工事日報の書き写しと集計を、いつもの Excel のまま減らす
 				</h1>
 				<p className="mt-6 max-w-xl text-lg leading-relaxed">

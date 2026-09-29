@@ -37,7 +37,7 @@ export function Details() {
 	return (
 		<section className="border-t border-hogan bg-white">
 			<div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-				<h2 className="font-display text-3xl sm:text-4xl">
+				<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
 					見つける書き忘れや食い違い
 				</h2>
 				<p className="mt-3 text-muted-foreground">
@@ -52,7 +52,7 @@ export function Details() {
 						>
 							<h3 className="text-lg font-bold">{title}</h3>
 							<p className="mt-2 text-sm leading-relaxed">{body}</p>
-							<ul className="mt-4 space-y-2 font-cell text-xs">
+							<ul className="mt-4 space-y-2 text-xs tabular-nums">
 								{examples.map((example) => (
 									<li
 										key={example}
@@ -66,7 +66,7 @@ export function Details() {
 					))}
 				</div>
 
-				<h2 className="mt-20 font-display text-3xl sm:text-4xl">
+				<h2 className="mt-20 text-2xl font-bold tracking-tight sm:text-3xl">
 					御社の様式に合わせるとき
 				</h2>
 				<ul className="mt-8 max-w-3xl list-disc space-y-3 pl-5 leading-relaxed marker:text-muted-foreground">

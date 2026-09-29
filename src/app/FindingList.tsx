@@ -2,7 +2,7 @@ import { type Finding, formatFinding } from "../finding.ts";
 
 export function FindingList({ findings }: { findings: Finding[] }) {
 	return (
-		<ul className="mt-3 max-h-64 space-y-1 overflow-y-auto rounded-md border border-hogan bg-white p-3 font-cell text-sm">
+		<ul className="mt-3 max-h-64 space-y-1 overflow-y-auto rounded-lg border border-hogan bg-white p-3 text-sm tabular-nums">
 			{findings.map((finding) => (
 				<li
 					key={`${finding.rowNumber}-${finding.column}-${finding.message}`}

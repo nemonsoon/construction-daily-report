@@ -18,7 +18,7 @@ export function StepCard({ number, title, mark, children }: Props) {
 		>
 			<span
 				className={cn(
-					"flex size-10 items-center justify-center rounded-full border-2 font-display text-lg",
+					"flex size-10 items-center justify-center rounded-full border-2 text-lg font-bold tabular-nums",
 					mark === "done" && "border-tape bg-tape text-white",
 					mark === "current" && "border-sumi bg-sumi text-white",
 					mark === "todo" && "border-hogan bg-white text-muted-foreground",
