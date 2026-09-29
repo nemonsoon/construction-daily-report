@@ -17,8 +17,16 @@ const ROW = [
 
 describe("markReview", () => {
 	it("指摘のセルだけに色を付け、指摘の列に文を書く", async () => {
-		// 往復させて、読み込んだブックの書式の使い回しが起きる条件にする
-		const workbook = await roundTrip(inputWorkbook([ROW, ROW]));
+		// 同じ罫線を付けて往復させ、読み込んだブックで書式オブジェクトが使い回される条件にする
+		const original = inputWorkbook([ROW, ROW]);
+		for (const row of [2, 3]) {
+			original.worksheets[0].getRow(row).eachCell((cell) => {
+				cell.border = { bottom: { style: "thin" } };
+			});
+		}
+		const workbook = await roundTrip(original);
+		const loaded = workbook.worksheets[0];
+		expect(loaded.getCell("B2").style).toBe(loaded.getCell("B3").style);
 		markReview(workbook, [
 			{ rowNumber: 2, column: "現場名", message: "「現場名」が空欄です" },
 			{ rowNumber: 2, column: "天候", message: "天候が食い違っています" },
