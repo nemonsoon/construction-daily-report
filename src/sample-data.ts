@@ -183,5 +183,26 @@ export function makeSampleWorkbook(): {
 		row.getCell(5).numFmt = "h:mm";
 		row.getCell(6).numFmt = "h:mm";
 	}
+	fitColumns(sheet);
 	return { workbook, planted };
+}
+
+// Excel の列の幅は半角1文字が1。全角は2文字分と数え、最も広い値に余白を足す
+function fitColumns(sheet: ExcelJS.Worksheet): void {
+	const textWidth = (text: string) =>
+		[...text].reduce((sum, char) => sum + (/[ -~]/.test(char) ? 1 : 2), 0);
+	for (let index = 1; index <= INPUT_COLUMNS.length; index++) {
+		const column = sheet.getColumn(index);
+		let widest = 0;
+		column.eachCell((cell) => {
+			const text =
+				cell.value instanceof Date
+					? cell.numFmt === "h:mm"
+						? "00:00"
+						: "2026/12/31"
+					: String(cell.value ?? "");
+			widest = Math.max(widest, textWidth(text));
+		});
+		column.width = widest + 2;
+	}
 }
