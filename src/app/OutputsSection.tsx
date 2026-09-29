@@ -1,6 +1,5 @@
 import dailyReportImage from "../../docs/images/daily-report.png";
 import summaryImage from "../../docs/images/summary.png";
-import { TryButton } from "./TryButton.tsx";
 
 const SHOTS = [
 	{
@@ -29,7 +28,7 @@ export function OutputsSection() {
 		>
 			<h2
 				id="outputs-title"
-				className="text-center text-2xl font-bold tracking-tight sm:text-3xl"
+				className="scroll-mt-24 text-center text-2xl font-bold tracking-tight sm:text-3xl"
 			>
 				出てくるもの
 			</h2>
@@ -54,7 +53,6 @@ export function OutputsSection() {
 					</figure>
 				))}
 			</div>
-			<TryButton centered className="mt-12" />
 		</section>
 	);
 }

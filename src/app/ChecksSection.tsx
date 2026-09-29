@@ -20,7 +20,7 @@ export function ChecksSection() {
 			<div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
 				<h2
 					id="checks-title"
-					className="text-center text-2xl font-bold tracking-tight sm:text-3xl"
+					className="scroll-mt-24 text-center text-2xl font-bold tracking-tight sm:text-3xl"
 				>
 					見つけるもの
 				</h2>

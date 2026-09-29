@@ -26,6 +26,12 @@ export function useScreen(): Screen {
 		document.title = DOCUMENT_TITLE[screen];
 		if (!switched.current) return;
 		switched.current = false;
+		// 足元のリンクのように区画を指す印なら、切り替えたあとその区画まで下りる
+		const section = document.getElementById(window.location.hash.slice(1));
+		if (section) {
+			section.scrollIntoView();
+			return;
+		}
 		window.scrollTo(0, 0);
 		document.getElementById(HEADING_ID[screen])?.focus();
 	}, [screen]);

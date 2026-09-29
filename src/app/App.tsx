@@ -1,4 +1,5 @@
 import { ChecksSection } from "./ChecksSection.tsx";
+import { ClosingCta } from "./ClosingCta.tsx";
 import { Hero } from "./Hero.tsx";
 import { OutputsSection } from "./OutputsSection.tsx";
 import { SiteFooter } from "./SiteFooter.tsx";
@@ -18,6 +19,7 @@ export function App() {
 					<Hero />
 					<ChecksSection />
 					<OutputsSection />
+					<ClosingCta />
 				</div>
 				<div hidden={screen !== "app"}>
 					<Steps />
