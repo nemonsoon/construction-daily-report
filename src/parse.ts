@@ -9,6 +9,9 @@ const BLANK = { kind: "blank" } as const;
 const UNREADABLE = { kind: "unreadable" } as const;
 const EXCEL_EPOCH = Date.UTC(1899, 11, 30);
 const DAY_MS = 86_400_000;
+// 桁の打ち間違い（20260901 を数値で入れた等）を日付として通さないため、日報として有り得る年に限る
+const MIN_YEAR = 2000;
+const MAX_YEAR = 2100;
 
 function ok<T>(value: T): Parsed<T> {
 	return { kind: "ok", value };
@@ -22,16 +25,20 @@ function isoDate(date: Date): string {
 	return date.toISOString().slice(0, 10);
 }
 
+function okDate(date: Date): Parsed<string> {
+	const year = date.getUTCFullYear();
+	if (Number.isNaN(year) || year < MIN_YEAR || year > MAX_YEAR) {
+		return UNREADABLE;
+	}
+	return ok(isoDate(date));
+}
+
 export function parseDate(raw: RawValue): Parsed<string> {
 	const value = normalized(raw);
 	if (value === null || value === "") return BLANK;
-	if (value instanceof Date) {
-		return Number.isNaN(value.getTime()) ? UNREADABLE : ok(isoDate(value));
-	}
+	if (value instanceof Date) return okDate(value);
 	if (typeof value === "number") {
-		return value >= 1
-			? ok(isoDate(new Date(EXCEL_EPOCH + Math.floor(value) * DAY_MS)))
-			: UNREADABLE;
+		return okDate(new Date(EXCEL_EPOCH + Math.floor(value) * DAY_MS));
 	}
 	const match = /^(\d{4})[/\-.年](\d{1,2})[/\-.月](\d{1,2})日?$/.exec(value);
 	if (!match) return UNREADABLE;
@@ -44,7 +51,7 @@ export function parseDate(raw: RawValue): Parsed<string> {
 	if (date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
 		return UNREADABLE;
 	}
-	return ok(isoDate(date));
+	return okDate(date);
 }
 
 export function parseTime(raw: RawValue): Parsed<number> {

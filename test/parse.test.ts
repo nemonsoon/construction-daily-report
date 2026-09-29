@@ -20,6 +20,16 @@ describe("parseDate", () => {
 	it.each([["9月1日"], ["2026/2/30"], ["きのう"]])("%s は読めない", (raw) => {
 		expect(parseDate(raw)).toEqual({ kind: "unreadable" });
 	});
+
+	it.each([
+		[20260901],
+		[1],
+		["1999/12/31"],
+		["2101/1/1"],
+		[new Date(Date.UTC(1899, 11, 30, 8))],
+	])("2000〜2100年の外の %s は読めない", (raw) => {
+		expect(parseDate(raw)).toEqual({ kind: "unreadable" });
+	});
 });
 
 describe("parseTime", () => {
