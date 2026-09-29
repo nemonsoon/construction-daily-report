@@ -3,42 +3,14 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta
+			name="description"
+			content="工事日報の Excel から書き忘れや食い違いを見つけて知らせ、直したものから決まった様式の日報と、現場別・月別の集計表を作る試作品です。"
+		/>
 		<title>工事日報の転記チェック</title>
-		<style>
-			body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.7; color: #222; }
-			h1 { font-size: 1.5rem; }
-			section { border: 1px solid #ddd; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
-			h2 { font-size: 1.1rem; margin-top: 0; }
-			#status { background: #fff8e1; border-radius: 8px; padding: 0.75rem 1.25rem 0.75rem 2rem; }
-			#status:empty { display: none; }
-			.note { color: #555; font-size: 0.9rem; }
-		</style>
 	</head>
 	<body>
-		<h1>工事日報の転記チェック</h1>
-		<p>現場で書いた工事日報の Excel から、書き忘れや食い違いを見つけて知らせ、直したものから決まった様式の日報と、現場別・月別の集計表を作ります。</p>
-		<p class="note">選んだファイルはこのパソコンのブラウザの中だけで処理し、どこにも送りません。使っているデータはすべて架空です。</p>
-
-		<section>
-			<h2>0. 見本を試す</h2>
-			<p>手元に日報が無ければ、書き間違いを仕込んだ見本を使ってください。</p>
-			<button id="sample" type="button">見本の Excel をダウンロード</button>
-		</section>
-
-		<section>
-			<h2>1. 日報の Excel を選ぶ</h2>
-			<p>書き忘れや食い違いのあるセルを黄色く塗り、「指摘」の列に理由を書いた <b>要確認.xlsx</b> をダウンロードします。</p>
-			<input id="check-file" type="file" accept=".xlsx" />
-		</section>
-
-		<section>
-			<h2>2. 直した要確認.xlsx を選ぶ</h2>
-			<p>黄色いセルを直して保存したら選んでください。指摘が残っていなければ <b>日報.xlsx</b> と <b>集計表.xlsx</b> をダウンロードします。</p>
-			<input id="report-file" type="file" accept=".xlsx" />
-		</section>
-
-		<ul id="status" aria-live="polite"></ul>
-
-		<script type="module" src="/src/main.ts"></script>
+		<div id="root"></div>
+		<script type="module" src="/src/main.tsx"></script>
 	</body>
 </html>

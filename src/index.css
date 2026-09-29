@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* ダークモードは作らない。部品の dark: がパソコンの設定で勝手に効かないよう、.dark の中だけに閉じ込める */
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+	--font-display: "Dela Gothic One", sans-serif;
+	--font-sans: "Zen Kaku Gothic New", system-ui, sans-serif;
+	--font-cell: "BIZ UDGothic", sans-serif;
+	--color-sumi: #1f2a2e;
+	--color-yacho: #f4f6f3;
+	--color-hogan: #d9ded6;
+	--color-caution: #f5c518;
+	--color-caution-soft: #fdf3c4;
+	--color-tape: #6fa544;
+	--color-tape-soft: #e6f1dc;
+}
+
+:root {
+	--radius: 0.5rem;
+	--background: #f4f6f3;
+	--foreground: #1f2a2e;
+	--card: #ffffff;
+	--card-foreground: #1f2a2e;
+	--popover: #ffffff;
+	--popover-foreground: #1f2a2e;
+	--primary: #1f2a2e;
+	--primary-foreground: #ffffff;
+	--secondary: #e8ece6;
+	--secondary-foreground: #1f2a2e;
+	--muted: #e8ece6;
+	--muted-foreground: #56615f;
+	--accent: #e8ece6;
+	--accent-foreground: #1f2a2e;
+	--destructive: #b3261e;
+	--border: #d9ded6;
+	--input: #d9ded6;
+	--ring: #1f2a2e;
+}
+
+@theme inline {
+	--font-heading: var(--font-sans);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background font-sans text-foreground antialiased;
+	}
+	h1,
+	h2,
+	h3 {
+		word-break: auto-phrase;
+	}
+}
+
+@utility bg-hogan-grid {
+	background-image:
+		linear-gradient(var(--color-hogan) 1px, transparent 1px),
+		linear-gradient(90deg, var(--color-hogan) 1px, transparent 1px);
+	background-size: 24px 24px;
+}
+
+/* 最後の形（黄色）を要素の地の色に置き、始まりだけを透明にする。動きを止めても黄色が残る */
+@keyframes flag-cell {
+	from {
+		background-color: transparent;
+	}
+}
+
+@utility animate-flag {
+	animation: flag-cell 0.6s ease-out backwards;
+}
