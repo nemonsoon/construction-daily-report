@@ -1,0 +1,12 @@
+# Format/lint on commit, tests on push.
+pre-commit:
+  commands:
+    biome:
+      glob: "*.{js,mjs,cjs,ts,mts,cts,json,jsonc,html,css}"
+      run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+      stage_fixed: true
+
+pre-push:
+  commands:
+    test:
+      run: pnpm test
