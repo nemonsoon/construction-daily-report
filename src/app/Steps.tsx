@@ -22,6 +22,7 @@ import {
 	stepMarks,
 } from "./flow.ts";
 import { StepCard } from "./StepCard.tsx";
+import { HEADING_ID } from "./screen.ts";
 
 const TONES = {
 	done: "bg-tape-soft",
@@ -148,11 +149,15 @@ export function Steps() {
 	}
 
 	return (
-		<section id="try" className="scroll-mt-6 border-y border-line bg-surface">
+		<section className="border-y border-line bg-surface">
 			<div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
-				<h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+				<h1
+					id={HEADING_ID.app}
+					tabIndex={-1}
+					className="text-2xl font-bold tracking-tight outline-none sm:text-3xl"
+				>
 					見本で試す
-				</h2>
+				</h1>
 				<p className="mt-3 text-muted-foreground">
 					3段で終わります。手元の日報の Excel でも試せます。
 				</p>
