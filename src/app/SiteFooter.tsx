@@ -9,8 +9,9 @@ const COLUMNS = [
 		title: "日報まとめ",
 		links: [
 			{ label: "見本で試す", href: APP_HASH },
-			{ label: "見つける書き忘れ", href: "#checks-title" },
+			{ label: "使い方の3手順", href: "#flow-title" },
 			{ label: "できあがる日報と集計表", href: "#outputs-title" },
+			{ label: "見つける書き忘れ", href: "#checks-title" },
 		],
 	},
 	{

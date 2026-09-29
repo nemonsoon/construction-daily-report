@@ -20,9 +20,9 @@ export function ChecksSection() {
 			<div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
 				<h2
 					id="checks-title"
-					className="scroll-mt-24 text-center text-2xl font-bold tracking-tight sm:text-3xl"
+					className="scroll-mt-24 text-center text-2xl font-bold tracking-tight [word-break:auto-phrase] sm:text-3xl"
 				>
-					見つけるもの
+					書き忘れは、まとめる前に分かります
 				</h2>
 				<ul className="mt-10 grid gap-6 md:grid-cols-3 md:gap-0 md:divide-x md:divide-line">
 					{CHECKS.map(({ icon: Icon, title, body }) => (

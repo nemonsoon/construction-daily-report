@@ -1,6 +1,7 @@
 import { ChecksSection } from "./ChecksSection.tsx";
 import { ClosingCta } from "./ClosingCta.tsx";
 import { Hero } from "./Hero.tsx";
+import { HowItWorksSection } from "./HowItWorksSection.tsx";
 import { OutputsSection } from "./OutputsSection.tsx";
 import { SiteFooter } from "./SiteFooter.tsx";
 import { SiteHeader } from "./SiteHeader.tsx";
@@ -17,8 +18,9 @@ export function App() {
 				{/* 画面を外さず隠すだけにして、説明のページへ戻っても手順の結果を残す */}
 				<div hidden={screen !== "landing"}>
 					<Hero />
-					<ChecksSection />
+					<HowItWorksSection />
 					<OutputsSection />
+					<ChecksSection />
 					<ClosingCta />
 				</div>
 				<div hidden={screen !== "app"}>

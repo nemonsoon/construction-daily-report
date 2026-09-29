@@ -28,9 +28,9 @@ export function OutputsSection() {
 		>
 			<h2
 				id="outputs-title"
-				className="scroll-mt-24 text-center text-2xl font-bold tracking-tight sm:text-3xl"
+				className="scroll-mt-24 text-center text-2xl font-bold tracking-tight [word-break:auto-phrase] sm:text-3xl"
 			>
-				出てくるもの
+				提出用の日報と、月の集計表ができあがります
 			</h2>
 			<div className="mt-10 grid gap-8 md:grid-cols-2 md:items-start">
 				{SHOTS.map(({ src, width, height, name, note, alt }) => (
