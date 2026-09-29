@@ -12,6 +12,7 @@ const COLUMNS = [
 			{ label: "使い方の3手順", href: "#flow-title" },
 			{ label: "できあがる日報と集計表", href: "#outputs-title" },
 			{ label: "見つける書き忘れ", href: "#checks-title" },
+			{ label: "よくある質問", href: "#faq-title" },
 		],
 	},
 	{

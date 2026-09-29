@@ -1,5 +1,6 @@
 import { ChecksSection } from "./ChecksSection.tsx";
 import { ClosingCta } from "./ClosingCta.tsx";
+import { FaqSection } from "./FaqSection.tsx";
 import { Hero } from "./Hero.tsx";
 import { HowItWorksSection } from "./HowItWorksSection.tsx";
 import { OutputsSection } from "./OutputsSection.tsx";
@@ -21,6 +22,7 @@ export function App() {
 					<HowItWorksSection />
 					<OutputsSection />
 					<ChecksSection />
+					<FaqSection />
 					<ClosingCta />
 				</div>
 				<div hidden={screen !== "app"}>
