@@ -125,3 +125,10 @@ export function parseText(raw: RawValue): string | null {
 	const text = raw instanceof Date ? isoDate(raw) : String(raw).trim();
 	return text === "" ? null : text;
 }
+
+// 現場名と作業員名は、全角と半角の違いと空白の数の違いをそろえ、同じ現場や同じ人として数える。
+// 「山田邸」と「山田邸 新築工事」のように言葉が違うものは別の現場の可能性があるので、そろえない
+export function parseName(raw: RawValue): string | null {
+	const text = parseText(raw);
+	return text === null ? null : text.normalize("NFKC").replace(/\s+/g, " ");
+}

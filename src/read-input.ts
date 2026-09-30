@@ -4,6 +4,7 @@ import {
 	type Parsed,
 	parseBreak,
 	parseDate,
+	parseName,
 	parseText,
 	parseTime,
 } from "./parse.ts";
@@ -53,9 +54,9 @@ export function readInput(workbook: ExcelJS.Workbook): WorkRow[] {
 		rows.push({
 			rowNumber,
 			date: take("日付", parseDate(raw("日付"))),
-			site: parseText(raw("現場名")),
+			site: parseName(raw("現場名")),
 			weather: parseText(raw("天候")),
-			worker: parseText(raw("作業員名")),
+			worker: parseName(raw("作業員名")),
 			start: take("開始時刻", parseTime(raw("開始時刻"))),
 			end: take("終了時刻", parseTime(raw("終了時刻"))),
 			breakMinutes: take("休憩(分)", parseBreak(raw("休憩(分)"))),

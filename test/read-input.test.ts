@@ -139,3 +139,17 @@ describe("readInput", () => {
 		expect(row.unreadable).toEqual(["開始時刻"]);
 	});
 });
+
+describe("readInput の名前のそろえ方", () => {
+	it("現場名と作業員名は、全角と半角の違いと空白の数の違いをそろえる", () => {
+		const [row] = readInput(
+			inputWorkbook([
+				ROW.map((value, i) =>
+					i === 1 ? " 山田邸　　新築工事 " : i === 3 ? "田中　一郎" : value,
+				),
+			]),
+		);
+		expect(row.site).toBe("山田邸 新築工事");
+		expect(row.worker).toBe("田中 一郎");
+	});
+});
