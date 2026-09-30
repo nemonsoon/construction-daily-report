@@ -89,4 +89,28 @@ describe("markReview", () => {
 		expect(fillColor(sheet.getCell("A2"))).toBe("FFC6EFCE");
 		expect(fillColor(sheet.getCell("B2"))).toBeUndefined();
 	});
+
+	it("見出しが3行目なら、指摘の列と固定と絞り込みも3行目に合わせる", () => {
+		const workbook = inputWorkbook([]);
+		const sheet = workbook.worksheets[0];
+		sheet.spliceRows(1, 1);
+		sheet.getCell("A1").value = "工事日報";
+		sheet.getRow(3).values = [
+			"日付",
+			"現場名",
+			"作業員名",
+			"開始時刻",
+			"終了時刻",
+		];
+		sheet.getRow(4).values = ["2026/9/1", "", "田中 一郎", "8:00", "17:00"];
+		markReview(workbook, [
+			{ rowNumber: 4, column: "現場名", message: "「現場名」が空欄です" },
+		]);
+		expect(sheet.getCell("F3").value).toBe("指摘");
+		expect(sheet.getCell("F4").value).toBe("「現場名」が空欄です");
+		expect(fillColor(sheet.getCell("B4"))).toBe("FFFFF2CC");
+		expect(sheet.views).toEqual([{ state: "frozen", xSplit: 0, ySplit: 3 }]);
+		expect(sheet.autoFilter).toBe("A3:F4");
+		expect(sheet.pageSetup.printTitlesRow).toBe("3:3");
+	});
 });

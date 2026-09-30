@@ -1,12 +1,8 @@
 import type ExcelJS from "exceljs";
-import { INPUT_COLUMNS, REVIEW_COLUMN } from "./columns.ts";
+import { REVIEW_COLUMN } from "./columns.ts";
 import type { Finding } from "./finding.ts";
-import {
-	ensureColumn,
-	findColumns,
-	setStyle,
-	setUpWorkingSheet,
-} from "./sheet.ts";
+import { ensureColumn, setStyle, setUpWorkingSheet } from "./sheet.ts";
+import { lastDataRow, locateTable } from "./table.ts";
 
 const HIGHLIGHT_COLOR = "FFFFF2CC";
 const HIGHLIGHT: ExcelJS.Fill = {
@@ -25,14 +21,15 @@ export function markReview(
 	workbook: ExcelJS.Workbook,
 	findings: Finding[],
 ): void {
-	const sheet = workbook.worksheets[0];
-	const reviewColumn = ensureColumn(sheet, REVIEW_COLUMN, 50);
-	const columns = findColumns(sheet);
+	const table = locateTable(workbook);
+	const { sheet, headerRow, columns } = table;
+	const last = lastDataRow(table);
+	const reviewColumn = ensureColumn(sheet, REVIEW_COLUMN, 50, headerRow);
 
-	for (let rowNumber = 2; rowNumber <= sheet.rowCount; rowNumber++) {
+	for (let rowNumber = headerRow + 1; rowNumber <= last; rowNumber++) {
 		// 前にかけた指摘の黄色だけを消し、利用者が自分で付けた色は残す
-		for (const name of INPUT_COLUMNS) {
-			const cell = sheet.getCell(rowNumber, columns.get(name) ?? 0);
+		for (const column of columns.values()) {
+			const cell = sheet.getCell(rowNumber, column);
 			if (isHighlight(cell)) setStyle(cell, { fill: NO_FILL });
 		}
 		sheet.getCell(rowNumber, reviewColumn).value = null;
@@ -40,13 +37,18 @@ export function markReview(
 
 	for (const [rowNumber, list] of Map.groupBy(findings, (f) => f.rowNumber)) {
 		for (const finding of list) {
-			setStyle(sheet.getCell(rowNumber, columns.get(finding.column) ?? 0), {
-				fill: HIGHLIGHT,
-			});
+			const column = columns.get(finding.column);
+			if (column === undefined) continue;
+			setStyle(sheet.getCell(rowNumber, column), { fill: HIGHLIGHT });
 		}
 		const cell = sheet.getCell(rowNumber, reviewColumn);
 		cell.value = list.map((finding) => finding.message).join("\n");
 		setStyle(cell, { alignment: { wrapText: true, vertical: "top" } });
 	}
-	setUpWorkingSheet(sheet, reviewColumn);
+	setUpWorkingSheet(
+		sheet,
+		Math.max(table.lastColumn, reviewColumn),
+		last,
+		headerRow,
+	);
 }

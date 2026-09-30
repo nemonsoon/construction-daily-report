@@ -187,7 +187,7 @@ export function makeSampleWorkbook(): {
 	}
 	fitColumns(sheet);
 	styleSample(sheet);
-	setUpWorkingSheet(sheet, INPUT_COLUMNS.length);
+	setUpWorkingSheet(sheet, INPUT_COLUMNS.length, sheet.rowCount);
 	return { workbook, planted };
 }
 

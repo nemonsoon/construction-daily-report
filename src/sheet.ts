@@ -67,9 +67,12 @@ export function plain(value: ExcelJS.CellValue): RawValue {
 	return null;
 }
 
-export function findColumns(sheet: ExcelJS.Worksheet): Map<string, number> {
+export function findColumns(
+	sheet: ExcelJS.Worksheet,
+	headerRow = 1,
+): Map<string, number> {
 	const columns = new Map<string, number>();
-	sheet.getRow(1).eachCell((cell, column) => {
+	sheet.getRow(headerRow).eachCell((cell, column) => {
 		const text = plain(cell.value);
 		if (typeof text !== "string") return;
 		const name = text.normalize("NFKC").trim();
@@ -91,12 +94,13 @@ export function ensureColumn(
 	sheet: ExcelJS.Worksheet,
 	header: string,
 	width: number,
+	headerRow = 1,
 ): number {
-	const columns = findColumns(sheet);
+	const columns = findColumns(sheet, headerRow);
 	const existing = columns.get(header);
 	if (existing !== undefined) return existing;
 	const column = Math.max(0, ...columns.values()) + 1;
-	const cell = sheet.getCell(1, column);
+	const cell = sheet.getCell(headerRow, column);
 	cell.value = header;
 	setStyle(cell, { font: { bold: true } });
 	sheet.getColumn(column).width = width;
@@ -108,15 +112,17 @@ export function ensureColumn(
 export function setUpWorkingSheet(
 	sheet: ExcelJS.Worksheet,
 	lastColumn: number,
+	lastRow: number,
+	headerRow = 1,
 ): void {
-	sheet.views = [{ state: "frozen", xSplit: 0, ySplit: 1 }];
-	const lastRow = Math.max(1, sheet.rowCount);
-	sheet.autoFilter = `A1:${sheet.getColumn(lastColumn).letter}${lastRow}`;
+	sheet.views = [{ state: "frozen", xSplit: 0, ySplit: headerRow }];
+	const lastLetter = sheet.getColumn(lastColumn).letter;
+	sheet.autoFilter = `A${headerRow}:${lastLetter}${Math.max(headerRow, lastRow)}`;
 	Object.assign(sheet.pageSetup, {
 		orientation: "landscape",
 		fitToPage: true,
 		fitToWidth: 1,
 		fitToHeight: 0,
-		printTitlesRow: "1:1",
+		printTitlesRow: `${headerRow}:${headerRow}`,
 	});
 }

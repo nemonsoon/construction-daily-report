@@ -101,7 +101,28 @@ describe("readInput", () => {
 	it("見出しが足りなければ、足りない見出しを挙げて止まる", () => {
 		const workbook = inputWorkbook([], ["日付", "現場名"]);
 		expect(() => readInput(workbook)).toThrow(InputFormatError);
-		expect(() => readInput(workbook)).toThrow(/天候/);
+		expect(() => readInput(workbook)).toThrow(/作業員名/);
+	});
+
+	it("題名の行の下にある表を読み、無い列は空として扱う", () => {
+		const workbook = inputWorkbook([]);
+		const sheet = workbook.worksheets[0];
+		sheet.spliceRows(1, 1);
+		sheet.getCell("A1").value = "工事日報 2026年9月";
+		sheet.getRow(3).values = ["日付", "現場名", "作業員名", "開始", "終了"];
+		sheet.getRow(4).values = [
+			"2026/9/1",
+			"山田邸 新築工事",
+			"田中 一郎",
+			"8:00",
+			"17:00",
+		];
+		const [row] = readInput(workbook);
+		expect(row.rowNumber).toBe(4);
+		expect(row.worker).toBe("田中 一郎");
+		expect(row.end).toBe(1020);
+		expect(row.weather).toBeNull();
+		expect(row.breakMinutes).toBeNull();
 	});
 
 	it("空の行は飛ばし、行番号は Excel 上のまま", () => {
