@@ -1,6 +1,6 @@
-import { HeroDocuments } from "./HeroDocuments.tsx";
-import { HEADING_ID } from "./screen.ts";
-import { TryButton } from "./TryButton.tsx";
+import { HEADING_ID } from "@/lib/screen.ts";
+import { HeroDocuments } from "./hero-documents.tsx";
+import { TryButton } from "./try-button.tsx";
 
 export function Hero() {
 	return (

@@ -1,6 +1,6 @@
 import { Check, ChevronRight, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { APP_HASH } from "./screen.ts";
+import { APP_HASH } from "@/lib/screen.ts";
 
 type Props = { className?: string };
 

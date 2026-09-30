@@ -1,7 +1,7 @@
 // Numbers で開いて表の部分だけを撮った画像。README と同じものを使う
 import { FileSpreadsheet } from "lucide-react";
-import dailyReportImage from "../../docs/images/daily-report.png";
-import summaryImage from "../../docs/images/summary.png";
+import dailyReportImage from "../../../../docs/images/daily-report.png";
+import summaryImage from "../../../../docs/images/summary.png";
 
 const SHOTS = [
 	{

@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { BrandMark } from "@/components/brand-mark.tsx";
 import { Button } from "@/components/ui/button";
-import { BrandMark } from "./BrandMark.tsx";
-import { APP_HASH, LANDING_HASH, type Screen } from "./screen.ts";
+import { APP_HASH, LANDING_HASH, type Screen } from "@/lib/screen.ts";
 
 export function SiteHeader({ screen }: { screen: Screen }) {
 	return (

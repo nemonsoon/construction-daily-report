@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-	APP_HASH,
-	LANDING_HASH,
-	screenFromHash,
-} from "../../src/app/screen.ts";
+import { APP_HASH, LANDING_HASH, screenFromHash } from "./screen.ts";
 
 describe("screenFromHash", () => {
 	it("#try ならアプリの画面を出す", () => {

@@ -9,7 +9,7 @@ import {
 	initialFlow,
 	isBusy,
 	stepMarks,
-} from "../../src/app/flow.ts";
+} from "./flow.ts";
 
 const finding: Finding = {
 	rowNumber: 3,

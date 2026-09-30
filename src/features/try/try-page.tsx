@@ -7,15 +7,18 @@ import {
 	Loader2,
 } from "lucide-react";
 import { type ReactNode, useEffect, useReducer, useState } from "react";
+import { USER_GUIDE } from "@/components/layout/site-footer.tsx";
 import { Button } from "@/components/ui/button";
 import {
 	makeSampleFile,
 	runCheck,
 	runReport,
 } from "@/features/daily-report/index.ts";
-import { download } from "./download.ts";
-import { FileDrop } from "./FileDrop.tsx";
-import { FindingList } from "./FindingList.tsx";
+import { FileDrop } from "@/features/try/components/file-drop.tsx";
+import { FindingList } from "@/features/try/components/finding-list.tsx";
+import { StepCard } from "@/features/try/components/step-card.tsx";
+import { download } from "@/lib/download.ts";
+import { HEADING_ID } from "@/lib/screen.ts";
 import {
 	errorMessage,
 	flowReducer,
@@ -23,9 +26,6 @@ import {
 	isBusy,
 	stepMarks,
 } from "./flow.ts";
-import { USER_GUIDE } from "./SiteFooter.tsx";
-import { StepCard } from "./StepCard.tsx";
-import { HEADING_ID } from "./screen.ts";
 
 const TONES = {
 	done: "bg-tape-soft",
@@ -117,7 +117,7 @@ function Loading() {
 	);
 }
 
-export function Steps() {
+export function TryPage() {
 	const [state, dispatch] = useReducer(flowReducer, initialFlow);
 	const [sampleMark, checkMark, reportMark] = stepMarks(state);
 	const busy = isBusy(state);

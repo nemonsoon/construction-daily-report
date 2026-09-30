@@ -4,7 +4,7 @@ import {
 	HEADING_ID,
 	type Screen,
 	screenFromHash,
-} from "./screen.ts";
+} from "@/lib/screen.ts";
 
 export function useScreen(): Screen {
 	const [screen, setScreen] = useState(() =>

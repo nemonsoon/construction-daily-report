@@ -2,7 +2,7 @@ import "@fontsource-variable/noto-sans-jp";
 import "./index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { App } from "./app/App.tsx";
+import { App } from "@/app/app.tsx";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("#root がありません");

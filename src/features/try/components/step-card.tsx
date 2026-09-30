@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import type { ReactNode } from "react";
+import type { StepMark } from "@/features/try/flow.ts";
 import { cn } from "@/lib/utils";
-import type { StepMark } from "./flow.ts";
 
 export function StepNumber({
 	number,

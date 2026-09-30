@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
-import { BrandMark } from "./BrandMark.tsx";
-import { APP_HASH } from "./screen.ts";
+import { BrandMark } from "@/components/brand-mark.tsx";
+import { APP_HASH } from "@/lib/screen.ts";
 
 export const REPO = "https://github.com/nemonsoon/construction-daily-report";
 export const USER_GUIDE = `${REPO}/blob/main/docs/user-guide.md`;

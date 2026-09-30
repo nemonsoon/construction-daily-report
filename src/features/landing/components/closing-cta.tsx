@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { APP_HASH } from "./screen.ts";
-import { Assurances } from "./TryButton.tsx";
+import { APP_HASH } from "@/lib/screen.ts";
+import { Assurances } from "./try-button.tsx";
 
 // 下まで読んだ人が、上へ戻らずに「見本で試す」を押せるようにする
 export function ClosingCta() {
