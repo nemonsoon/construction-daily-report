@@ -131,6 +131,22 @@ export function Steps() {
 		};
 	}, []);
 
+	// 手順3でファイルを選んだ位置のままだと完了の帯が画面の外に出るため、帯まで下りる
+	const finished = state.report.kind === "done";
+	useEffect(() => {
+		if (!finished) return;
+		const reduce = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+		document
+			.getElementById("finished-title")
+			?.closest("section")
+			?.scrollIntoView({
+				block: "center",
+				behavior: reduce ? "auto" : "smooth",
+			});
+	}, [finished]);
+
 	async function takeSample() {
 		download(
 			await toBytes(makeSampleWorkbook().workbook),
