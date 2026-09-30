@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { APP_HASH } from "./screen.ts";
+import { Assurances } from "./TryButton.tsx";
 
 // 下まで読んだ人が、上へ戻らずに「見本で試す」を押せるようにする
 export function ClosingCta() {
@@ -22,10 +23,7 @@ export function ClosingCta() {
 						<ChevronRight aria-hidden className="size-5" />
 					</a>
 				</Button>
-				<p className="mt-4 flex justify-center gap-x-4 text-sm text-white/60">
-					<span>登録不要</span>
-					<span>ファイルはどこにも送りません</span>
-				</p>
+				<Assurances className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-white/60" />
 			</div>
 		</section>
 	);

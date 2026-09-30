@@ -1,4 +1,10 @@
-import { ChevronRight } from "lucide-react";
+import {
+	ChevronRight,
+	FileCheck,
+	FileUp,
+	type LucideIcon,
+	PencilLine,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -117,19 +123,27 @@ function Outputs() {
 	);
 }
 
-const STEPS: { title: string; body: string; picture: ReactNode }[] = [
+const STEPS: {
+	title: string;
+	icon: LucideIcon;
+	body: string;
+	picture: ReactNode;
+}[] = [
 	{
 		title: "読み込む",
+		icon: FileUp,
 		body: "いつもの日報のExcelを読み込みます",
 		picture: <InputSheet flagged={false} />,
 	},
 	{
 		title: "直す",
+		icon: PencilLine,
 		body: "黄色いセルだけ直して、読み込み直します",
 		picture: <InputSheet flagged />,
 	},
 	{
 		title: "できあがる",
+		icon: FileCheck,
 		body: "提出用の日報と、月の集計表が出てきます",
 		picture: <Outputs />,
 	},
@@ -146,7 +160,7 @@ export function HowItWorksSection() {
 					3つの手順で、日報がまとまります
 				</h2>
 				<ol className="mt-10 grid gap-6 md:grid-cols-3 md:gap-10">
-					{STEPS.map(({ title, body, picture }, index) => (
+					{STEPS.map(({ title, icon: Icon, body, picture }, index) => (
 						<li
 							key={title}
 							className="relative flex flex-col rounded-2xl border border-line bg-white p-5 shadow-sm"
@@ -156,6 +170,11 @@ export function HowItWorksSection() {
 									{index + 1}
 								</span>
 								<h3 className="text-lg font-bold">{title}</h3>
+								<Icon
+									aria-hidden
+									className="ml-auto size-5 shrink-0 text-muted-foreground"
+									strokeWidth={1.75}
+								/>
 							</div>
 							<p className="mt-2 text-sm text-muted-foreground">{body}</p>
 							<div aria-hidden className="mt-4">

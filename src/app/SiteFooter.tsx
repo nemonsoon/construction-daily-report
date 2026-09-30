@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import { BrandMark } from "./BrandMark.tsx";
 import { APP_HASH } from "./screen.ts";
 
@@ -63,7 +64,8 @@ export function SiteFooter({ compact }: { compact: boolean }) {
 					className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3"
 				>
 					{COLUMNS.map(({ title, links }) => (
-						<div key={title}>
+						// スマートフォン幅では3つ目の列が2行目に1つだけ来るので、横幅いっぱいに広げて文字を折り返させない
+						<div key={title} className="last:col-span-2 sm:last:col-span-1">
 							<h2 className="text-sm font-bold">{title}</h2>
 							<ul className="mt-2">
 								{links.map(({ label, href }) => (
@@ -72,7 +74,17 @@ export function SiteFooter({ compact }: { compact: boolean }) {
 											href={href}
 											className="inline-flex min-h-11 items-center text-sm text-muted-foreground hover:text-foreground"
 										>
-											{label}
+											{/* 折り返しても矢印が文の終わりに付くよう、文字と同じ行の流れに置く */}
+											<span>
+												{label}
+												{href.startsWith("http") && (
+													<ArrowUpRight
+														aria-hidden
+														className="ml-1 inline-block size-3.5 align-[-2px]"
+														strokeWidth={1.75}
+													/>
+												)}
+											</span>
 										</a>
 									</li>
 								))}

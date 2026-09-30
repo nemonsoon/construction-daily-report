@@ -1,4 +1,5 @@
 // Numbers で開いて表の部分だけを撮った画像。README と同じものを使う
+import { FileSpreadsheet } from "lucide-react";
 import dailyReportImage from "../../docs/images/daily-report.png";
 import summaryImage from "../../docs/images/summary.png";
 
@@ -40,7 +41,12 @@ export function OutputsSection() {
 						{/* 横2列のときは2枚のカードの高さをそろえ、背の低い集計表は上に寄せる */}
 						<div className="flex-1 overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
 							<p className="border-b border-line bg-surface px-4 py-2">
-								<span className="rounded-md bg-ink px-2.5 py-0.5 text-xs font-medium text-white">
+								<span className="inline-flex items-center gap-1.5 rounded-md bg-ink px-2.5 py-0.5 text-xs font-medium text-white">
+									<FileSpreadsheet
+										aria-hidden
+										className="size-3.5 shrink-0"
+										strokeWidth={1.75}
+									/>
 									{name}
 								</span>
 							</p>
