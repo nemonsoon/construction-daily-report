@@ -205,7 +205,7 @@ export function Steps() {
 
 	return (
 		<div className="min-h-[calc(100dvh-4rem)] bg-surface">
-			<div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
+			<div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
 				<h1
 					id={HEADING_ID.app}
 					tabIndex={-1}

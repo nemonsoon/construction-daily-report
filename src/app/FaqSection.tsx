@@ -32,7 +32,7 @@ export function FaqSection() {
 			>
 				よくある質問
 			</h2>
-			<dl className="mx-auto mt-10 grid max-w-4xl gap-x-12 md:grid-cols-2">
+			<dl className="mt-10 grid gap-x-12 md:grid-cols-2">
 				{FAQS.map(({ question, answer }) => (
 					<div
 						key={question}
