@@ -21,7 +21,7 @@ import {
 	isBusy,
 	stepMarks,
 } from "./flow.ts";
-import { REPO } from "./SiteFooter.tsx";
+import { USER_GUIDE } from "./SiteFooter.tsx";
 import { StepCard } from "./StepCard.tsx";
 import { HEADING_ID } from "./screen.ts";
 
@@ -335,7 +335,7 @@ export function Steps() {
 								御社の様式に合わせて作れます。
 							</p>
 							<a
-								href={`${REPO}#御社の様式に合わせるとき`}
+								href={`${USER_GUIDE}#御社の様式に合わせるとき`}
 								className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brand underline-offset-4 hover:underline"
 							>
 								様式を合わせるときの説明を見る

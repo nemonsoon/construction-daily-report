@@ -3,6 +3,7 @@ import { BrandMark } from "./BrandMark.tsx";
 import { APP_HASH } from "./screen.ts";
 
 export const REPO = "https://github.com/nemonsoon/construction-daily-report";
+export const USER_GUIDE = `${REPO}/blob/main/docs/user-guide.md`;
 
 // リンク先はページの中の区画と README・ライセンスだけにし、無いページへのリンクは作らない
 const COLUMNS = [
@@ -19,11 +20,11 @@ const COLUMNS = [
 	{
 		title: "詳しい説明",
 		links: [
-			{ label: "使い方", href: `${REPO}#使い方` },
-			{ label: "読み込める日報の形", href: `${REPO}#読み込める日報の形` },
+			{ label: "使い方", href: `${USER_GUIDE}#使い方` },
+			{ label: "読み込める日報の形", href: `${USER_GUIDE}#読み込める日報の形` },
 			{
 				label: "様式を合わせるとき",
-				href: `${REPO}#御社の様式に合わせるとき`,
+				href: `${USER_GUIDE}#御社の様式に合わせるとき`,
 			},
 		],
 	},
