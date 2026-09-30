@@ -7,14 +7,21 @@ describe("checkTimes", () => {
 		expect(checkTimes([workRow()])).toEqual([]);
 	});
 
-	it("終了が開始と同じか前なら指摘する", () => {
+	it("終了が開始と同じか前なら、夜の作業の書き方を添えて指摘する", () => {
 		expect(checkTimes([workRow({ end: 420 })])).toEqual([
 			{
 				rowNumber: 2,
 				column: "終了時刻",
-				message: "終了時刻が開始時刻と同じか、それより前です",
+				message:
+					"終了時刻が開始時刻と同じか、それより前です（夜の作業なら「翌6:00」のように書いてください）",
 			},
 		]);
+	});
+
+	it("翌日に終わる夜の作業は指摘しない", () => {
+		expect(
+			checkTimes([workRow({ start: 22 * 60, end: 24 * 60 + 6 * 60 })]),
+		).toEqual([]);
 	});
 
 	it("休憩が作業時間以上なら指摘する", () => {

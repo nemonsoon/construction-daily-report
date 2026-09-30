@@ -20,7 +20,8 @@ export function checkTimes(rows: WorkRow[]): Finding[] {
 			findings.push({
 				rowNumber: row.rowNumber,
 				column: "終了時刻",
-				message: "終了時刻が開始時刻と同じか、それより前です",
+				message:
+					"終了時刻が開始時刻と同じか、それより前です（夜の作業なら「翌6:00」のように書いてください）",
 			});
 			continue;
 		}

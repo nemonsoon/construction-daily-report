@@ -54,23 +54,33 @@ export function parseDate(raw: RawValue): Parsed<string> {
 	return okDate(date);
 }
 
+// 日をまたぐ夜の作業は、翌日の時刻を 1440分（24:00）以上で表す。
+// 書き間違い（開始と終了の入れ替え）を夜の作業と取り違えないよう、翌日と読むのは
+// 「翌6:00」「30:00」のように翌日だと書いてあるときだけにする
+const MINUTES_PER_DAY = 1440;
+
 export function parseTime(raw: RawValue): Parsed<number> {
 	const value = normalized(raw);
 	if (value === null || value === "") return BLANK;
 	if (value instanceof Date) {
-		return Number.isNaN(value.getTime())
-			? UNREADABLE
-			: ok(value.getUTCHours() * 60 + value.getUTCMinutes());
+		if (Number.isNaN(value.getTime())) return UNREADABLE;
+		const clock = value.getUTCHours() * 60 + value.getUTCMinutes();
+		// Excel に「30:00」と打つと 1899-12-31 6:00 として読まれる
+		const nextDay = Math.floor((value.getTime() - EXCEL_EPOCH) / DAY_MS) === 1;
+		return ok(nextDay ? clock + MINUTES_PER_DAY : clock);
 	}
 	if (typeof value === "number") {
-		return value >= 0 && value < 1 ? ok(Math.round(value * 1440)) : UNREADABLE;
+		return value >= 0 && value < 2
+			? ok(Math.round(value * MINUTES_PER_DAY))
+			: UNREADABLE;
 	}
-	const match = /^(\d{1,2})(?::(\d{2})|時(?:(\d{1,2})分)?)$/.exec(value);
+	const match = /^(翌)?(\d{1,2})(?::(\d{2})|時(?:(\d{1,2})分)?)$/.exec(value);
 	if (!match) return UNREADABLE;
-	const hours = Number(match[1]);
-	const minutes = Number(match[2] ?? match[3] ?? 0);
-	if (hours > 23 || minutes > 59) return UNREADABLE;
-	return ok(hours * 60 + minutes);
+	const nextDay = match[1] !== undefined;
+	const hours = Number(match[2]);
+	const minutes = Number(match[3] ?? match[4] ?? 0);
+	if (hours > (nextDay ? 23 : 47) || minutes > 59) return UNREADABLE;
+	return ok((nextDay ? MINUTES_PER_DAY : 0) + hours * 60 + minutes);
 }
 
 export function parseBreak(raw: RawValue): Parsed<number> {

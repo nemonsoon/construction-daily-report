@@ -12,6 +12,8 @@ describe("formatClock", () => {
 		[480, "8:00"],
 		[545, "9:05"],
 		[0, "0:00"],
+		[1800, "翌6:00"],
+		[1440, "翌0:00"],
 	])("%i分は %s", (minutes, expected) => {
 		expect(formatClock(minutes)).toBe(expected);
 	});

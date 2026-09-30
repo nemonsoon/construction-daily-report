@@ -40,13 +40,22 @@ describe("parseTime", () => {
 		["8時", 480],
 		["8時30分", 510],
 		[0.5, 720],
+		["翌6:00", 1800],
+		["翌6時30分", 1830],
+		["30:00", 1800],
+		["24:00", 1440],
+		[1.25, 1800],
+		[new Date(Date.UTC(1899, 11, 31, 6, 0)), 1800],
 	])("%s は %i分", (raw, expected) => {
 		expect(parseTime(raw)).toEqual({ kind: "ok", value: expected });
 	});
 
-	it.each([["8時ごろ"], ["25:00"], ["8:75"], [1.5]])("%s は読めない", (raw) => {
-		expect(parseTime(raw)).toEqual({ kind: "unreadable" });
-	});
+	it.each([["8時ごろ"], ["48:00"], ["翌25:00"], ["8:75"], [2.5]])(
+		"%s は読めない",
+		(raw) => {
+			expect(parseTime(raw)).toEqual({ kind: "unreadable" });
+		},
+	);
 });
 
 describe("parseBreak", () => {
