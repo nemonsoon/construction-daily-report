@@ -318,10 +318,10 @@ export function Steps() {
 							strokeWidth={1.75}
 						/>
 						<h2 id="finished-title" className="mt-3 text-2xl font-bold">
-							一周できました
+							日報と集計表ができあがりました
 						</h2>
 						<p className="mt-2 text-muted-foreground">
-							日報.xlsx と集計表.xlsx ができあがりました。
+							日報.xlsx と集計表.xlsx を開いて、中身を確かめてください。
 						</p>
 						<div className="mx-auto mt-6 max-w-md border-t border-line pt-5">
 							<p className="flex items-center justify-center gap-2 font-medium">

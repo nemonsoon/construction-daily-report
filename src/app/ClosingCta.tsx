@@ -11,7 +11,7 @@ export function ClosingCta() {
 					id="closing-title"
 					className="text-2xl font-bold tracking-tight sm:text-3xl"
 				>
-					まずは見本の日報で、一周してみてください
+					まずは見本の日報で試してみてください
 				</h2>
 				<p className="mt-4 text-white/75">
 					3つの手順で、日報と集計表ができあがるまでを試せます。
