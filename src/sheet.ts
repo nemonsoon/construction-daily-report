@@ -102,3 +102,21 @@ export function ensureColumn(
 	sheet.getColumn(column).width = width;
 	return column;
 }
+
+// 人が直すための表の設定。下へ送っても見出しが見えるよう固定し、絞り込みを付け、
+// 印刷は横向きで横幅を1ページに収めて、2ページ目以降にも見出しの行を出す
+export function setUpWorkingSheet(
+	sheet: ExcelJS.Worksheet,
+	lastColumn: number,
+): void {
+	sheet.views = [{ state: "frozen", xSplit: 0, ySplit: 1 }];
+	const lastRow = Math.max(1, sheet.rowCount);
+	sheet.autoFilter = `A1:${sheet.getColumn(lastColumn).letter}${lastRow}`;
+	Object.assign(sheet.pageSetup, {
+		orientation: "landscape",
+		fitToPage: true,
+		fitToWidth: 1,
+		fitToHeight: 0,
+		printTitlesRow: "1:1",
+	});
+}

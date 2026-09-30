@@ -55,4 +55,38 @@ describe("markReview", () => {
 		expect(sheet.getCell("K2").value).toBeNull();
 		expect(sheet.getCell("L1").value).toBeNull();
 	});
+
+	it("見出しの行を固定し、絞り込みを付け、横向きで横幅を1ページに収める", async () => {
+		const workbook = inputWorkbook([ROW, ROW]);
+		markReview(workbook, []);
+		const sheet = workbook.worksheets[0];
+		expect(sheet.views).toEqual([{ state: "frozen", xSplit: 0, ySplit: 1 }]);
+		expect(sheet.autoFilter).toBe("A1:K3");
+		expect(sheet.pageSetup.orientation).toBe("landscape");
+		expect(sheet.pageSetup.fitToPage).toBe(true);
+		expect(sheet.pageSetup.fitToWidth).toBe(1);
+		expect(sheet.pageSetup.fitToHeight).toBe(0);
+		expect(sheet.pageSetup.printTitlesRow).toBe("1:1");
+
+		const reloaded = (await roundTrip(workbook)).worksheets[0];
+		expect(reloaded.views[0]).toMatchObject({ state: "frozen", ySplit: 1 });
+		expect(reloaded.autoFilter).toBe("A1:K3");
+	});
+
+	it("利用者が付けた色は残し、日報まとめが付けた黄色だけを消す", async () => {
+		const original = inputWorkbook([ROW]);
+		original.worksheets[0].getCell("A2").fill = {
+			type: "pattern",
+			pattern: "solid",
+			fgColor: { argb: "FFC6EFCE" },
+		};
+		markReview(original, [
+			{ rowNumber: 2, column: "現場名", message: "空欄です" },
+		]);
+		const reloaded = await roundTrip(original);
+		markReview(reloaded, []);
+		const sheet = reloaded.worksheets[0];
+		expect(fillColor(sheet.getCell("A2"))).toBe("FFC6EFCE");
+		expect(fillColor(sheet.getCell("B2"))).toBeUndefined();
+	});
 });

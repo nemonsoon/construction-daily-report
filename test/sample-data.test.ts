@@ -33,4 +33,15 @@ describe("makeSampleWorkbook", () => {
 			expect(sheet.getColumn(column).width).toBeGreaterThan(widest);
 		});
 	});
+
+	it("見出しを固定して絞り込みを付け、游ゴシックで横向きに印刷できる", () => {
+		const sheet = makeSampleWorkbook().workbook.worksheets[0];
+		expect(sheet.views).toEqual([{ state: "frozen", xSplit: 0, ySplit: 1 }]);
+		expect(sheet.autoFilter).toBe("A1:J53");
+		expect(sheet.pageSetup.orientation).toBe("landscape");
+		expect(sheet.pageSetup.printTitlesRow).toBe("1:1");
+		expect(sheet.getCell("A1").font?.name).toBe("游ゴシック");
+		expect(sheet.getCell("A1").font?.bold).toBe(true);
+		expect(sheet.getCell("H30").font?.name).toBe("游ゴシック");
+	});
 });

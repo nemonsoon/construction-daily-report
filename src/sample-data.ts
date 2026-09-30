@@ -1,5 +1,7 @@
 import ExcelJS from "exceljs";
 import { type ColumnName, INPUT_COLUMNS } from "./columns.ts";
+import { FONT } from "./form.ts";
+import { setStyle, setUpWorkingSheet } from "./sheet.ts";
 
 export type Planted = { rowNumber: number; column: ColumnName; reason: string };
 
@@ -184,6 +186,8 @@ export function makeSampleWorkbook(): {
 		row.getCell(6).numFmt = "h:mm";
 	}
 	fitColumns(sheet);
+	styleSample(sheet);
+	setUpWorkingSheet(sheet, INPUT_COLUMNS.length);
 	return { workbook, planted };
 }
 
@@ -204,5 +208,26 @@ function fitColumns(sheet: ExcelJS.Worksheet): void {
 			widest = Math.max(widest, textWidth(text));
 		});
 		column.width = widest + 2;
+	}
+}
+
+// 見本は、会社で普段使われている日報の Excel らしく、見出しを太字と淡い灰色にし、書体を游ゴシックにそろえる
+function styleSample(sheet: ExcelJS.Worksheet): void {
+	for (let row = 1; row <= sheet.rowCount; row++) {
+		for (let column = 1; column <= INPUT_COLUMNS.length; column++) {
+			const header = row === 1;
+			setStyle(sheet.getCell(row, column), {
+				font: { name: FONT, size: 11, bold: header },
+				...(header
+					? {
+							fill: {
+								type: "pattern",
+								pattern: "solid",
+								fgColor: { argb: "FFF2F2F2" },
+							},
+						}
+					: {}),
+			});
+		}
 	}
 }
