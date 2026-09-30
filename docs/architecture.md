@@ -32,8 +32,9 @@ Excel の読み込み、検査、日報と集計表の作成は、すべて利�
 
 ## 処理の流れ
 
-処理は2つの入口だけを画面に見せます（`src/pipeline.ts`）。
-どちらも Excel のファイルの中身（バイト列）を受け取り、バイト列を返すので、画面やブラウザの仕組みには依存しません。
+処理が画面に見せるのは、`src/features/daily-report/index.ts` に並べた入口だけです。
+中心は次の2つで（`pipeline.ts`）、どちらも Excel のファイルの中身（バイト列）を受け取り、バイト列を返すので、画面やブラウザの仕組みには依存しません。
+ほかに、見本の日報を作る `makeSampleFile` と、指摘の型 `Finding`、読めない形を知らせる `InputFormatError` を見せています。
 
 ```mermaid
 flowchart TD
@@ -57,22 +58,35 @@ flowchart TD
 
 ## フォルダの役割
 
+機能ごとにフォルダを分けています（bulletproof-react の features の分け方）。
+テストは、確かめる対象のファイルの隣に `*.test.ts` として置きます。
+
 | 場所 | 役割 |
 | --- | --- |
-| `src/*.ts` | 処理。画面に見せる2つの入口（`pipeline.ts`）、Excel の読み書き（`sheet.ts`）、見出しの探し方（`table.ts`、`columns.ts`）、値の読み方（`parse.ts`）、行の読み込み（`read-input.ts`）、検査を通った行と並び順（`checked-row.ts`）、指摘の形（`finding.ts`）、作業時間（`work-time.ts`）、要確認.xlsx（`review.ts`）、日報（`daily-report.ts`）、集計表（`summary.ts`）、印刷の書式（`form.ts`）、見本（`sample-data.ts`） |
-| `src/checks/` | 検査。1つの種類を1ファイルにし、`index.ts` がまとめて走らせる |
-| `src/app/` | 画面。説明のページとアプリの画面の部品と、画面の状態の移り変わり（`flow.ts`） |
-| `src/components/ui/` | shadcn/ui から取り込んだ部品 |
-| `test/` | テスト。`src/` と同じ並びに置く |
+| `src/main.tsx` | 入口。書体とスタイルを読み込み、`App` を描く |
+| `src/app/` | 画面の組み立て。説明のページとアプリの画面を並べ、住所の末尾で切り替える（`use-screen.ts`） |
+| `src/config/` | あちこちで使う定数。出てくるファイルの名前（`files.ts`）、GitHub の説明書などへのリンク（`links.ts`）、説明のページの区画の id（`sections.ts`） |
+| `src/components/` | 機能をまたいで使う画面の部品。上部の帯と足元（`layout/`）、ロゴの印、shadcn/ui から取り込んだ部品（`ui/`） |
+| `src/lib/` | 機能に依らない道具。ファイルのダウンロード、画面の切り替えの決まり（`screen.ts`）、動きを減らす設定の読み取り、クラス名をまとめる `cn` |
+| `src/features/daily-report/` | 処理（画面を持たない）。`excel/`（Excel の読み書きと印刷の書式）、`input/`（見出しの探し方・値の読み方・行の読み込み）、`checks/`（検査。1つの種類を1ファイルにし、`index.ts` がまとめて走らせる）、`outputs/`（要確認.xlsx・日報・集計表と、作業時間・並び順）、`sample/`（見本の日報）、`testing/`（テストだけで使う道具） |
+| `src/features/landing/` | 説明のページ。`landing-page.tsx` が区画を並べ、区画ごとの部品は `components/` |
+| `src/features/try/` | アプリの画面（見本で試す）。状態の移り変わり（`flow.ts`）、操作をまとめるフック（`hooks/`）、状態と操作を配る context（`try-flow-context.tsx`）、手順ごとの部品（`components/`） |
 | `public/` | ブラウザのタブのアイコン |
-| `docs/images/` | README とページで使う Excel の画面写真 |
+| `docs/images/` | README・説明書・ページで使う画面写真 |
+
+ファイル名はすべてケバブケースにし、部品の名前（`TryPage` など）はパスカルケースにします。
+読み込みは、フォルダをまたぐときは `@/` から書き、同じフォルダの中は `./` で書きます。
 
 ## 作りの決まり
 
-- 処理と画面を分ける。処理（`src/*.ts` と `src/checks/`）は React もブラウザの仕組みも使わず、テストで中身を確かめる。
-- 画面の中で判断を持つのは、画面の状態の移り変わり（`src/app/flow.ts`）だけにし、ここをテストで押さえる。見た目の部品は単体テストをせず、ブラウザの画面写真で確かめる。
-- 説明のページとアプリの画面は、住所の末尾（`#try`）で切り替える1つのページにする（`src/app/screen.ts`）。GitHub Pages のどの住所に置いても動くよう、`vite.config.ts` の `base` は `./` にしてある。
-- Excel を書き出すときは、必ず `toBytes`（`src/sheet.ts`）を通す。exceljs は時刻を保存するときに割り算の誤差で 8:00 を 7:59:59.999… にすることがあり、`toBytes` が保存の直前にぴったりの値へ戻している。
-- Excel の書式には、曜日の `aaa` や条件つきの書式のような、Excel 以外の表計算ソフトで読めない書き方を使わない。曜日は隣のセルに文字で書き、翌日の時刻はそのセルだけ `"翌"h:mm` の書式にする（`src/daily-report.ts`）。
-- 現場名と作業員名は、元の日報に最初に出てきた順に並べる（`src/checked-row.ts`）。漢字は読み仮名が無いと読みの順に並べられないため。
+- 処理と画面を分ける。処理（`src/features/daily-report/`）は React もブラウザの仕組みも使わず、テストで中身を確かめる。
+- 読み込みの向きは、`app` → `features` → `components`・`lib`・`config` の一方向にする。共通の部品や道具は機能を読み込まない。機能どうしは読み込まないが、アプリの画面（`try`）だけは処理（`daily-report`）を `index.ts` の入口から読み込む。処理を呼ぶことがアプリの画面の仕事のため。
+- アプリの画面の状態は、状態の移り変わり（`src/features/try/flow.ts`）の1か所に持つ。できあがったファイルもここに入れる。判断はここの純粋関数に集め、テストで押さえる。ブラウザとのやり取り（ファイルを読む、処理を呼ぶ、ダウンロードする）は `hooks/use-try-flow.ts` に置く。
+- 手順の部品へは、状態と操作を props で受け渡さず、context（`try-flow-context.tsx`）から各部品が取り出す。context はアプリの画面の中だけに置く。
+- 見た目の部品は単体テストをせず、ブラウザの画面写真で確かめる。
+- 出てくるファイルの名前・リンク・区画の id のように、2か所以上で使う値は `src/config/` に1つだけ置く。
+- 説明のページとアプリの画面は、住所の末尾（`#try`）で切り替える1つのページにする（`src/lib/screen.ts`）。GitHub Pages のどの住所に置いても動くよう、`vite.config.ts` の `base` は `./` にしてある。
+- Excel を書き出すときは、必ず `toBytes`（`src/features/daily-report/excel/sheet.ts`）を通す。exceljs は時刻を保存するときに割り算の誤差で 8:00 を 7:59:59.999… にすることがあり、`toBytes` が保存の直前にぴったりの値へ戻している。
+- Excel の書式には、曜日の `aaa` や条件つきの書式のような、Excel 以外の表計算ソフトで読めない書き方を使わない。曜日は隣のセルに文字で書き、翌日の時刻はそのセルだけ `"翌"h:mm` の書式にする（`src/features/daily-report/outputs/daily-report.ts`）。
+- 現場名と作業員名は、元の日報に最初に出てきた順に並べる（`src/features/daily-report/outputs/checked-row.ts`）。漢字は読み仮名が無いと読みの順に並べられないため。
 - 動かすたびに料金がかかる外部のサービスは使わない。
