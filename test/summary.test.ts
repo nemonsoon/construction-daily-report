@@ -30,15 +30,15 @@ const rows = toCheckedRows([
 ]);
 
 describe("summarize", () => {
-	it("月ごとに、現場別の延べ人数と作業員別の出勤日数と作業時間を足す", () => {
+	it("月ごとに、現場別の延べ人数と作業員別の出勤日数と作業時間を足し、元の日報に出てきた順に並べる", () => {
 		expect(summarize(rows)).toEqual([
 			{
 				month: "2026-09",
 				from: "2026-09-01",
 				to: "2026-09-02",
 				sites: [
-					{ name: "駅前店舗 改装工事", count: 2, hours: 11 },
 					{ name: "山田邸 新築工事", count: 2, hours: 14 },
+					{ name: "駅前店舗 改装工事", count: 2, hours: 11 },
 				],
 				workers: [
 					{ name: "田中 一郎", count: 2, hours: 17 },
@@ -92,8 +92,8 @@ describe("buildSummaryWorkbook", () => {
 			"延べ人数(人)",
 			"作業時間(時間)",
 		]);
-		expect(firstThree(sheet, 7)).toEqual(["駅前店舗 改装工事", 2, 11]);
-		expect(firstThree(sheet, 8)).toEqual(["山田邸 新築工事", 2, 14]);
+		expect(firstThree(sheet, 7)).toEqual(["山田邸 新築工事", 2, 14]);
+		expect(firstThree(sheet, 8)).toEqual(["駅前店舗 改装工事", 2, 11]);
 		expect(sheet.getCell("A9").value).toBe("合計");
 		expect(sheet.getCell("B9").value).toEqual({
 			formula: "SUM(B7:B8)",

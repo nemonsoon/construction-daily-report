@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-import type { CheckedRow } from "./checked-row.ts";
+import { type CheckedRow, inSheetOrder } from "./checked-row.ts";
 import {
 	A4,
 	DATE_FORMAT,
@@ -36,13 +36,11 @@ function tally(
 	nameOf: (row: CheckedRow) => string,
 	countOf: (group: CheckedRow[]) => number,
 ): Tally[] {
-	return [...Map.groupBy(rows, nameOf)]
-		.map(([name, group]) => ({
-			name,
-			count: countOf(group),
-			hours: hoursOf(group),
-		}))
-		.sort((a, b) => a.name.localeCompare(b.name, "ja"));
+	return [...Map.groupBy(inSheetOrder(rows), nameOf)].map(([name, group]) => ({
+		name,
+		count: countOf(group),
+		hours: hoursOf(group),
+	}));
 }
 
 export function summarize(rows: CheckedRow[]): MonthSummary[] {

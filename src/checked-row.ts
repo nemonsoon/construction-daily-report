@@ -41,3 +41,9 @@ export function toCheckedRows(rows: WorkRow[]): CheckedRow[] {
 		};
 	});
 }
+
+// 現場名や作業員名は、元の日報に最初に出てきた順に並べる。
+// 漢字は読み仮名が無いと読みの順に並べられないため、会社の人が普段書いている順を使う
+export function inSheetOrder(rows: CheckedRow[]): CheckedRow[] {
+	return rows.toSorted((a, b) => a.rowNumber - b.rowNumber);
+}

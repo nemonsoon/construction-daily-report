@@ -52,11 +52,11 @@ describe("buildDailyReports", () => {
 		return sheet;
 	}
 
-	it("現場ごとに1シートにし、現場名の読みの順に並べる", () => {
+	it("現場ごとに1シートにし、元の日報に出てきた順に並べる", () => {
 		const workbook = buildDailyReports(rows);
 		expect(workbook.worksheets.map((sheet) => sheet.name)).toEqual([
-			"駅前店舗 改装工事",
 			"山田邸 新築工事",
+			"駅前店舗 改装工事",
 		]);
 	});
 

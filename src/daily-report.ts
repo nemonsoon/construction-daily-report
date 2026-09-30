@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-import type { CheckedRow } from "./checked-row.ts";
+import { type CheckedRow, inSheetOrder } from "./checked-row.ts";
 import { A4, DATE_FORMAT, HOURS_FORMAT, merge, put, toDate } from "./form.ts";
 import { workMinutes } from "./work-time.ts";
 
@@ -36,8 +36,8 @@ function uniqueTexts(values: (string | null)[]): string[] {
 export function buildDailyReports(rows: CheckedRow[]): ExcelJS.Workbook {
 	const workbook = new ExcelJS.Workbook();
 	const used = new Set<string>();
-	const bySite = Map.groupBy(rows, (row) => row.site);
-	const sites = [...bySite.keys()].sort((a, b) => a.localeCompare(b, "ja"));
+	const bySite = Map.groupBy(inSheetOrder(rows), (row) => row.site);
+	const sites = [...bySite.keys()];
 	for (const site of sites) {
 		const sheet = workbook.addWorksheet(sheetName(site, used), {
 			pageSetup: {
