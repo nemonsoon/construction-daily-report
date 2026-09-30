@@ -6,10 +6,12 @@ type Props = {
 	id: string;
 	label: string;
 	disabled: boolean;
+	// 今の段のときだけ濃い青にし、今押してほしいボタンを1つに絞る
+	primary: boolean;
 	onFile: (file: File) => void;
 };
 
-export function FileDrop({ id, label, disabled, onFile }: Props) {
+export function FileDrop({ id, label, disabled, primary, onFile }: Props) {
 	const [over, setOver] = useState(false);
 
 	return (
@@ -47,7 +49,12 @@ export function FileDrop({ id, label, disabled, onFile }: Props) {
 			{/* 見た目だけのボタン。押すと label 全体が input を開く */}
 			<span
 				aria-hidden="true"
-				className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 font-medium text-primary-foreground"
+				className={cn(
+					"inline-flex h-11 items-center justify-center gap-2 rounded-lg border px-5 font-medium",
+					primary
+						? "border-transparent bg-primary text-primary-foreground"
+						: "border-border bg-background",
+				)}
 			>
 				<Upload className="size-5" />
 				ファイルを選ぶ

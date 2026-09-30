@@ -23,7 +23,6 @@ import {
 } from "./flow.ts";
 import { REPO } from "./SiteFooter.tsx";
 import { StepCard } from "./StepCard.tsx";
-import { Stepper } from "./Stepper.tsx";
 import { HEADING_ID } from "./screen.ts";
 
 const TONES = {
@@ -116,8 +115,7 @@ function Loading() {
 
 export function Steps() {
 	const [state, dispatch] = useReducer(flowReducer, initialFlow);
-	const marks = stepMarks(state);
-	const [sampleMark, checkMark, reportMark] = marks;
+	const [sampleMark, checkMark, reportMark] = stepMarks(state);
 	const busy = isBusy(state);
 	const [review, setReview] = useState<OutputFile[]>([]);
 	const [reports, setReports] = useState<OutputFile[]>([]);
@@ -200,18 +198,18 @@ export function Steps() {
 				<p className="mt-3 text-center text-muted-foreground">
 					上から順に進めると、最後に日報と集計表のExcelが手に入ります。
 				</p>
-				<div className="mt-8">
-					<Stepper marks={marks} />
-				</div>
-
-				<ol className="mt-8 space-y-6">
+				<ol className="mt-10 space-y-6">
 					<StepCard
 						number={1}
 						title="見本の日報をダウンロードする"
 						mark={sampleMark}
 					>
 						<p>書き忘れや食い違いを9か所入れた、練習用の日報です。</p>
-						<Button onClick={takeSample} className="h-11 px-5 text-base">
+						<Button
+							onClick={takeSample}
+							variant={sampleMark === "current" ? "default" : "outline"}
+							className="h-11 px-5 text-base"
+						>
 							<Download aria-hidden />
 							見本をダウンロード
 						</Button>
@@ -231,6 +229,7 @@ export function Steps() {
 							id="check-file"
 							label="日報のExcelを読み込む"
 							disabled={busy}
+							primary={checkMark === "current"}
 							onFile={check}
 						/>
 						{state.check.kind === "loading" && <Loading />}
@@ -267,6 +266,7 @@ export function Steps() {
 							id="report-file"
 							label="直したExcelを読み込む"
 							disabled={busy}
+							primary={reportMark === "current"}
 							onFile={report}
 						/>
 						{state.report.kind === "loading" && <Loading />}
