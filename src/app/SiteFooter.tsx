@@ -20,7 +20,7 @@ const COLUMNS = [
 		title: "詳しい説明",
 		links: [
 			{ label: "使い方", href: `${REPO}#使い方` },
-			{ label: "読み込める日報の形", href: `${REPO}#入力の-excel-の形` },
+			{ label: "読み込める日報の形", href: `${REPO}#読み込める日報の形` },
 			{
 				label: "様式を合わせるとき",
 				href: `${REPO}#御社の様式に合わせるとき`,
@@ -33,7 +33,7 @@ const COLUMNS = [
 			{ label: "ソースコード（GitHub）", href: REPO },
 			{
 				label: "自分のパソコンで動かす",
-				href: `${REPO}#手元で動かす開発者向け`,
+				href: `${REPO}/blob/main/docs/development.md`,
 			},
 			{ label: "ライセンス（MIT）", href: `${REPO}/blob/main/LICENSE` },
 		],
