@@ -58,11 +58,15 @@ describe("runReport", () => {
 				],
 			]),
 		);
-		const result = await runReport(input);
+		const result = await runReport(input, "2026-09-30");
 		if (!result.ok) throw new Error("通るはずの入力で止まった");
 		const daily = await loadWorkbook(result.daily);
 		const summary = await loadWorkbook(result.summary);
 		expect(daily.worksheets[0].name).toBe("山田邸 新築工事");
-		expect(summary.worksheets[0].getCell("C2").value).toBe(1);
+		expect(summary.worksheets[0].name).toBe("2026年9月");
+		expect(summary.worksheets[0].getCell("B7").value).toBe(1);
+		expect(summary.worksheets[0].getCell("B3").value).toEqual(
+			new Date(Date.UTC(2026, 8, 30)),
+		);
 	});
 });

@@ -16,7 +16,18 @@ export async function runCheck(
 	return { findings, review: await toBytes(workbook) };
 }
 
-export async function runReport(data: ArrayBuffer | Uint8Array): Promise<
+// 集計表の作成日。利用者のパソコンの暦で今日の日付にする
+function today(): string {
+	const now = new Date();
+	const month = String(now.getMonth() + 1).padStart(2, "0");
+	const day = String(now.getDate()).padStart(2, "0");
+	return `${now.getFullYear()}-${month}-${day}`;
+}
+
+export async function runReport(
+	data: ArrayBuffer | Uint8Array,
+	createdOn: string = today(),
+): Promise<
 	| { ok: false; findings: Finding[] }
 	| {
 			ok: true;
@@ -32,6 +43,6 @@ export async function runReport(data: ArrayBuffer | Uint8Array): Promise<
 	return {
 		ok: true,
 		daily: await toBytes(buildDailyReports(checked)),
-		summary: await toBytes(buildSummaryWorkbook(summarize(checked))),
+		summary: await toBytes(buildSummaryWorkbook(summarize(checked), createdOn)),
 	};
 }

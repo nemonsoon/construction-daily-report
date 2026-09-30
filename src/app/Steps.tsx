@@ -191,7 +191,7 @@ export function Steps() {
 				},
 				{
 					name: "集計表.xlsx",
-					note: "延べ人数と作業時間の合計",
+					note: "月ごとに現場別と作業員別の工数",
 					bytes: result.summary,
 				},
 			]);
