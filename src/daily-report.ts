@@ -1,21 +1,38 @@
 import ExcelJS from "exceljs";
 import type { CheckedRow } from "./checked-row.ts";
 import { setStyle } from "./sheet.ts";
-import { formatClock, workMinutes } from "./work-time.ts";
+import { workMinutes } from "./work-time.ts";
 
 const INVALID_SHEET_CHARS = /[\\/?*:[\]]/g;
 const MAX_SHEET_NAME = 31;
 // exceljs の PaperSize は const enum で実行時に値が無いため、A4 の番号を直接書く
 const A4 = 9;
+const FONT = "游ゴシック";
+const MINUTES_PER_DAY = 1440;
+// 曜日の書式（aaa）や条件つきの書式は、Numbers や macOS のプレビューで読めずにそのまま出るため使わない。
+// 曜日は文字で隣に書き、翌日の時刻はそのセルだけ「翌」を付けた書式にする
+const DATE_FORMAT = 'yyyy"年"m"月"d"日"';
+const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
+// h は日を数えず時だけを出すので、1日を超える値（30:00）も「翌6:00」になる
+function clockFormat(minutes: number): string {
+	return minutes >= MINUTES_PER_DAY ? '"翌"h:mm' : "h:mm";
+}
+const HOURS_FORMAT = "0.00";
+const THIN: Partial<ExcelJS.Border> = { style: "thin" };
+const BOX: Partial<ExcelJS.Borders> = {
+	top: THIN,
+	left: THIN,
+	bottom: THIN,
+	right: THIN,
+};
+const LABEL_FILL: ExcelJS.Fill = {
+	type: "pattern",
+	pattern: "solid",
+	fgColor: { argb: "FFF2F2F2" },
+};
 
-export function sheetName(
-	date: string,
-	site: string,
-	used: Set<string>,
-): string {
-	const base = `${date.slice(5)} ${site}`
-		.replace(INVALID_SHEET_CHARS, "_")
-		.slice(0, MAX_SHEET_NAME);
+export function sheetName(site: string, used: Set<string>): string {
+	const base = site.replace(INVALID_SHEET_CHARS, "_").slice(0, MAX_SHEET_NAME);
 	let name = base;
 	// Excel のシート名は大文字と小文字を区別せずに重なりを判定する
 	for (let n = 2; used.has(name.toLowerCase()); n++) {
@@ -32,112 +49,187 @@ function uniqueTexts(values: (string | null)[]): string[] {
 	];
 }
 
+function toDate(isoDate: string): Date {
+	return new Date(`${isoDate}T00:00:00Z`);
+}
+
+// 1現場を1シートにし、その中に1日分ずつ日付の順に並べて、1日ごとに改ページする。
+// 1日と1現場ごとにシートを分けると、1か月分でシートが数十枚になり探しにくいため
 export function buildDailyReports(rows: CheckedRow[]): ExcelJS.Workbook {
 	const workbook = new ExcelJS.Workbook();
 	const used = new Set<string>();
-	const groups = Map.groupBy(rows, (row) => `${row.date}\t${row.site}`);
-	const keys = [...groups.keys()].sort((a, b) => a.localeCompare(b, "ja"));
-	for (const key of keys) {
-		const group = groups.get(key) ?? [];
-		const sheet = workbook.addWorksheet(
-			sheetName(group[0].date, group[0].site, used),
-			{
-				pageSetup: {
-					paperSize: A4,
-					orientation: "portrait",
-					fitToPage: true,
-					fitToWidth: 1,
-					fitToHeight: 0,
-				},
+	const bySite = Map.groupBy(rows, (row) => row.site);
+	const sites = [...bySite.keys()].sort((a, b) => a.localeCompare(b, "ja"));
+	for (const site of sites) {
+		const sheet = workbook.addWorksheet(sheetName(site, used), {
+			pageSetup: {
+				paperSize: A4,
+				orientation: "portrait",
+				fitToPage: true,
+				fitToWidth: 1,
+				fitToHeight: 0,
+				horizontalCentered: true,
 			},
-		);
-		writeDailySheet(sheet, group);
+			headerFooter: { oddFooter: "&L&A&R&P / &N ページ" },
+		});
+		sheet.columns = [
+			{ width: 14 },
+			{ width: 8 },
+			{ width: 8 },
+			{ width: 9 },
+			{ width: 14 },
+			{ width: 18 },
+			{ width: 9 },
+			{ width: 9 },
+		];
+		const byDate = Map.groupBy(bySite.get(site) ?? [], (row) => row.date);
+		const dates = [...byDate.keys()].sort();
+		let top = 1;
+		dates.forEach((date, index) => {
+			const bottom = writeDay(sheet, top, byDate.get(date) ?? []);
+			if (index < dates.length - 1) sheet.getRow(bottom).addPageBreak();
+			top = bottom + 1;
+		});
 	}
 	return workbook;
 }
 
-function writeDailySheet(sheet: ExcelJS.Worksheet, group: CheckedRow[]): void {
-	const { date, site } = group[0];
-	sheet.columns = [
-		{ width: 16 },
-		{ width: 10 },
-		{ width: 10 },
-		{ width: 10 },
-		{ width: 16 },
-	];
+type CellStyle = {
+	bold?: boolean;
+	size?: number;
+	border?: boolean;
+	label?: boolean;
+	align?: ExcelJS.Alignment["horizontal"];
+	numFmt?: string;
+	wrap?: boolean;
+};
 
-	sheet.mergeCells("A1:E1");
-	const title = sheet.getCell("A1");
-	title.value = "工事日報";
-	setStyle(title, {
-		font: { bold: true, size: 16 },
-		alignment: { horizontal: "center" },
+function put(
+	sheet: ExcelJS.Worksheet,
+	row: number,
+	column: number,
+	value: ExcelJS.CellValue,
+	style: CellStyle = {},
+): void {
+	const cell = sheet.getCell(row, column);
+	cell.value = value;
+	setStyle(cell, {
+		font: { name: FONT, size: style.size ?? 10.5, bold: style.bold ?? false },
+		alignment: {
+			vertical: style.wrap ? "top" : "middle",
+			horizontal: style.align,
+			wrapText: style.wrap ?? false,
+		},
+		...(style.border || style.label ? { border: BOX } : {}),
+		...(style.label ? { fill: LABEL_FILL } : {}),
+		...(style.numFmt ? { numFmt: style.numFmt } : {}),
 	});
+}
 
-	sheet.getRow(3).values = [
-		"日付",
-		date,
-		"",
-		"天候",
-		uniqueTexts(group.map((row) => row.weather))[0] ?? "",
-	];
-	sheet.getRow(4).values = ["現場名", site];
-	sheet.mergeCells("B4:E4");
+// 結合したセルの範囲すべてに罫線を引く。結合しても罫線は各セルに持たせないと途中で切れる
+function merge(
+	sheet: ExcelJS.Worksheet,
+	row: number,
+	from: number,
+	to: number,
+	value: ExcelJS.CellValue,
+	style: CellStyle = {},
+): void {
+	for (let column = from; column <= to; column++) {
+		put(sheet, row, column, column === from ? value : null, style);
+	}
+	sheet.mergeCells(row, from, row, to);
+}
 
-	sheet.getRow(6).values = [
-		"作業員名",
-		"開始",
-		"終了",
-		"休憩(分)",
-		"作業時間(時間)",
-	];
-	sheet.getRow(6).eachCell((cell) => setStyle(cell, { font: { bold: true } }));
+// 1日分を top の行から書き、最後の行の番号を返す
+function writeDay(
+	sheet: ExcelJS.Worksheet,
+	top: number,
+	group: CheckedRow[],
+): number {
+	const { date, site } = group[0];
+	let row = top;
 
-	let rowNumber = 7;
+	merge(sheet, row, 1, 6, "工事日報", { bold: true, size: 18 });
+	put(sheet, row, 7, "作成", { label: true, align: "center", size: 9 });
+	put(sheet, row, 8, "確認", { label: true, align: "center", size: 9 });
+	row++;
+	// 押印かサインが入る高さ
+	sheet.getRow(row).height = 40;
+	put(sheet, row, 7, null, { border: true });
+	put(sheet, row, 8, null, { border: true });
+	row += 2;
+
+	put(sheet, row, 1, "日付", { label: true });
+	const day = toDate(date);
+	merge(sheet, row, 2, 3, day, { border: true, numFmt: DATE_FORMAT });
+	put(sheet, row, 4, `（${WEEKDAYS[day.getUTCDay()]}）`, { border: true });
+	put(sheet, row, 5, "天候", { label: true });
+	merge(
+		sheet,
+		row,
+		6,
+		8,
+		uniqueTexts(group.map((line) => line.weather))[0] ?? "",
+		{ border: true },
+	);
+	row++;
+	put(sheet, row, 1, "現場名", { label: true });
+	merge(sheet, row, 2, 8, site, { border: true });
+	row += 2;
+
+	const headers = ["作業員名", "開始", "終了", "休憩(分)", "作業時間(時間)"];
+	headers.forEach((header, index) => {
+		put(sheet, row, index + 1, header, { label: true, align: "center" });
+	});
+	merge(sheet, row, 6, 8, "作業内容", { label: true, align: "center" });
+	row++;
+
 	let totalMinutes = 0;
-	for (const row of group) {
-		const minutes = workMinutes(row.start, row.end, row.breakMinutes);
+	for (const line of group) {
+		const minutes = workMinutes(line.start, line.end, line.breakMinutes);
 		totalMinutes += minutes;
-		sheet.getRow(rowNumber).values = [
-			row.worker,
-			formatClock(row.start),
-			formatClock(row.end),
-			row.breakMinutes,
-			minutes / 60,
-		];
-		sheet.getCell(rowNumber, 5).numFmt = "0.00";
-		rowNumber++;
+		put(sheet, row, 1, line.worker, { border: true });
+		put(sheet, row, 2, line.start / MINUTES_PER_DAY, {
+			border: true,
+			align: "center",
+			numFmt: clockFormat(line.start),
+		});
+		put(sheet, row, 3, line.end / MINUTES_PER_DAY, {
+			border: true,
+			align: "center",
+			numFmt: clockFormat(line.end),
+		});
+		put(sheet, row, 4, line.breakMinutes, { border: true });
+		put(sheet, row, 5, minutes / 60, { border: true, numFmt: HOURS_FORMAT });
+		merge(sheet, row, 6, 8, line.work ?? "", { border: true, wrap: true });
+		row++;
 	}
-	sheet.getRow(rowNumber).values = [
-		"人数",
-		`${group.length}人`,
-		"",
-		"合計",
-		totalMinutes / 60,
-	];
-	sheet.getCell(rowNumber, 5).numFmt = "0.00";
-	rowNumber += 2;
+	put(sheet, row, 1, "合計", { label: true, bold: true });
+	merge(sheet, row, 2, 4, `${group.length}人`, {
+		border: true,
+		align: "center",
+		bold: true,
+	});
+	put(sheet, row, 5, totalMinutes / 60, {
+		border: true,
+		numFmt: HOURS_FORMAT,
+		bold: true,
+	});
+	merge(sheet, row, 6, 8, null, { border: true });
+	row += 2;
 
-	const sections: [string, string[]][] = [
-		[
-			"作業内容",
-			group.flatMap((row) =>
-				row.work === null ? [] : [`${row.worker}: ${row.work}`],
-			),
-		],
-		["安全", uniqueTexts(group.map((row) => row.safety))],
-		["備考", uniqueTexts(group.map((row) => row.note))],
+	const notes: [string, string[]][] = [
+		["安全", uniqueTexts(group.map((line) => line.safety))],
+		["備考", uniqueTexts(group.map((line) => line.note))],
 	];
-	for (const [label, lines] of sections) {
-		const labelCell = sheet.getCell(rowNumber, 1);
-		labelCell.value = label;
-		setStyle(labelCell, { font: { bold: true } });
-		sheet.mergeCells(rowNumber + 1, 1, rowNumber + 1, 5);
-		const body = sheet.getCell(rowNumber + 1, 1);
-		body.value = lines.join("\n");
-		setStyle(body, { alignment: { wrapText: true, vertical: "top" } });
+	notes.forEach(([label, lines], index) => {
+		merge(sheet, row, 1, 8, label, { label: true });
+		row++;
+		merge(sheet, row, 1, 8, lines.join("\n"), { border: true, wrap: true });
 		// 結合したセルは Excel が高さを自動で合わせないので、行数から決める
-		sheet.getRow(rowNumber + 1).height = Math.max(1, lines.length) * 18;
-		rowNumber += 3;
-	}
+		sheet.getRow(row).height = Math.max(2, lines.length) * 18;
+		if (index < notes.length - 1) row += 2;
+	});
+	return row;
 }

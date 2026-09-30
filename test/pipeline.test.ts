@@ -62,7 +62,7 @@ describe("runReport", () => {
 		if (!result.ok) throw new Error("通るはずの入力で止まった");
 		const daily = await loadWorkbook(result.daily);
 		const summary = await loadWorkbook(result.summary);
-		expect(daily.worksheets[0].name).toBe("09-01 山田邸 新築工事");
+		expect(daily.worksheets[0].name).toBe("山田邸 新築工事");
 		expect(summary.worksheets[0].getCell("C2").value).toBe(1);
 	});
 });

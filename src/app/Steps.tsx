@@ -186,7 +186,7 @@ export function Steps() {
 			setReports([
 				{
 					name: "日報.xlsx",
-					note: "1日・1現場ごとに1枚のシート",
+					note: "現場ごとのシートに1日1ページ",
 					bytes: result.daily,
 				},
 				{
