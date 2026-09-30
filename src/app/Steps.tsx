@@ -42,7 +42,7 @@ function Notice({
 		// 読めなかった知らせは、読み上げの途中でも割り込んで伝える
 		<div
 			role={tone === "error" ? "alert" : "status"}
-			className={`rounded-xl px-4 py-3 ${TONES[tone]}`}
+			className={`rounded-xl px-4 py-3 [word-break:auto-phrase] ${TONES[tone]}`}
 		>
 			{tone === "done" ? (
 				<div className="flex items-start gap-2">
@@ -81,7 +81,9 @@ function Outputs({ files }: { files: OutputFile[] }) {
 					/>
 					<span className="min-w-0 flex-1">
 						<span className="block font-bold">{name}</span>
-						<span className="block text-sm text-muted-foreground">{note}</span>
+						<span className="block text-sm text-muted-foreground [word-break:auto-phrase]">
+							{note}
+						</span>
 					</span>
 					<Button
 						variant="outline"
@@ -191,7 +193,7 @@ export function Steps() {
 				},
 				{
 					name: "集計表.xlsx",
-					note: "月ごとに現場別と作業員別の工数",
+					note: "月ごとに現場別と作業員別の集計",
 					bytes: result.summary,
 				},
 			]);
@@ -238,8 +240,8 @@ export function Steps() {
 
 					<StepCard number={2} title="書き忘れを確かめる" mark={checkMark}>
 						<p>
-							日報を読み込むと、直してほしいセルを黄色く塗った{" "}
-							<b>要確認.xlsx</b> が届きます。
+							日報を読み込むと、直してほしいセルを黄色く塗った<b>要確認.xlsx</b>{" "}
+							がダウンロードされます。
 						</p>
 						<FileDrop
 							id="check-file"
@@ -256,7 +258,7 @@ export function Steps() {
 							<Notice tone="done">
 								<p>
 									書き忘れや食い違いは見つかりませんでした。要確認.xlsx
-									をそのまま手順3に置けます。
+									をそのまま手順3で読み込めます。
 								</p>
 								<Outputs files={review} />
 							</Notice>
@@ -275,8 +277,8 @@ export function Steps() {
 
 					<StepCard number={3} title="日報と集計表にまとめる" mark={reportMark}>
 						<p>
-							直した要確認.xlsx を読み込むと、<b>日報.xlsx</b> と{" "}
-							<b>集計表.xlsx</b> が届きます。
+							直した要確認.xlsx を読み込むと、<b>日報.xlsx</b> と
+							<b>集計表.xlsx</b> がダウンロードされます。
 						</p>
 						<FileDrop
 							id="report-file"

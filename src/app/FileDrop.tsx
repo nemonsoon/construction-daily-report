@@ -43,7 +43,7 @@ export function FileDrop({ id, label, disabled, primary, onFile }: Props) {
 			<span className="min-w-0 flex-1">
 				<span className="block font-bold">{label}</span>
 				<span className="block text-sm text-muted-foreground">
-					ここに置くか、ボタンから選ぶ（.xlsx）
+					ここにドラッグするか、ボタンから選ぶ（.xlsx）
 				</span>
 			</span>
 			{/* 見た目だけのボタン。押すと label 全体が input を開く */}

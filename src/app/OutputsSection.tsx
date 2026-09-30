@@ -16,7 +16,7 @@ const SHOTS = [
 		width: 906,
 		height: 721,
 		name: "集計表.xlsx",
-		note: "月ごとに現場別と作業員別の延べ人数と作業時間",
+		note: "月ごとに1シート。現場別の延べ人数と作業員別の出勤日数",
 		alt: "集計表.xlsx の2026年9月のシート。題名、対象の日報の期間と作成日の下に、現場別の延べ人数と作業時間の表と、作業員別の出勤日数と作業時間の表が、それぞれ合計の行つきで並ぶ",
 	},
 ];
@@ -57,7 +57,9 @@ export function OutputsSection() {
 							</div>
 						</div>
 						<figcaption className="mt-3 text-center">
-							<span className="text-sm text-muted-foreground">{note}</span>
+							<span className="text-sm text-muted-foreground [word-break:auto-phrase]">
+								{note}
+							</span>
 						</figcaption>
 					</figure>
 				))}
