@@ -1,4 +1,5 @@
 import {
+	ArrowRight,
 	CircleCheck,
 	Download,
 	FileSpreadsheet,
@@ -20,6 +21,7 @@ import {
 	isBusy,
 	stepMarks,
 } from "./flow.ts";
+import { REPO } from "./SiteFooter.tsx";
 import { StepCard } from "./StepCard.tsx";
 import { Stepper } from "./Stepper.tsx";
 import { HEADING_ID } from "./screen.ts";
@@ -288,15 +290,41 @@ export function Steps() {
 					</StepCard>
 				</ol>
 
+				{/* 一周を終えた瞬間がこのページの成果なので、終わったと分かる区切りを出す */}
 				{state.report.kind === "done" && (
-					<p className="mt-8 flex items-center justify-center gap-2 text-muted-foreground">
-						<LayoutTemplate
+					<section
+						aria-labelledby="finished-title"
+						className="mt-8 rounded-2xl border border-line bg-white px-6 py-8 text-center shadow-sm [word-break:auto-phrase]"
+					>
+						<CircleCheck
 							aria-hidden
-							className="size-5 shrink-0"
+							className="mx-auto size-12 text-tape"
 							strokeWidth={1.75}
 						/>
-						御社の様式に合わせて作れます。
-					</p>
+						<h2 id="finished-title" className="mt-3 text-2xl font-bold">
+							一周できました
+						</h2>
+						<p className="mt-2 text-muted-foreground">
+							日報.xlsx と集計表.xlsx ができあがりました。
+						</p>
+						<div className="mx-auto mt-6 max-w-md border-t border-line pt-5">
+							<p className="flex items-center justify-center gap-2 font-medium">
+								<LayoutTemplate
+									aria-hidden
+									className="size-5 shrink-0"
+									strokeWidth={1.75}
+								/>
+								御社の様式に合わせて作れます。
+							</p>
+							<a
+								href={`${REPO}#御社の様式に合わせるとき`}
+								className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-brand underline-offset-4 hover:underline"
+							>
+								様式を合わせるときの説明を見る
+								<ArrowRight aria-hidden className="size-4" />
+							</a>
+						</div>
+					</section>
 				)}
 			</div>
 		</div>

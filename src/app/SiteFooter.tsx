@@ -1,7 +1,7 @@
 import { BrandMark } from "./BrandMark.tsx";
 import { APP_HASH } from "./screen.ts";
 
-const REPO = "https://github.com/nemonsoon/construction-daily-report";
+export const REPO = "https://github.com/nemonsoon/construction-daily-report";
 
 // リンク先はページの中の区画と README・ライセンスだけにし、無いページへのリンクは作らない
 const COLUMNS = [
