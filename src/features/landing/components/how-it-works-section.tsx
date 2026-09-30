@@ -6,6 +6,8 @@ import {
 	PencilLine,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import { FILE_NAME } from "@/config/files.ts";
+import { SECTION_ID } from "@/config/sections.ts";
 import { cn } from "@/lib/utils";
 
 type Cell = { text: string; flagged?: boolean };
@@ -82,7 +84,7 @@ function MiniTable({
 function InputSheet({ flagged }: { flagged: boolean }) {
 	return (
 		<MiniTable
-			caption={flagged ? "要確認.xlsx" : "工事日報.xlsx"}
+			caption={flagged ? FILE_NAME.review : "工事日報.xlsx"}
 			headers={["日付", "現場名", "開始時刻"]}
 			rows={INPUT_ROWS.map((row, rowIndex) =>
 				row.map((text, column) => ({
@@ -102,7 +104,7 @@ function Outputs() {
 	return (
 		<div className="grid gap-3">
 			<MiniTable
-				caption="日報.xlsx　9/4 駅前店舗 改装工事"
+				caption={`${FILE_NAME.daily}　9/4 駅前店舗 改装工事`}
 				headers={["作業員名", "開始", "終了", "時間"]}
 				numeric={[1, 2, 3]}
 				rows={toCells([
@@ -111,7 +113,7 @@ function Outputs() {
 				])}
 			/>
 			<MiniTable
-				caption="集計表.xlsx　2026年9月"
+				caption={`${FILE_NAME.summary}　2026年9月`}
 				headers={["現場名", "延べ人数", "時間"]}
 				numeric={[1, 2]}
 				rows={toCells([
@@ -151,10 +153,10 @@ const STEPS: {
 
 export function HowItWorksSection() {
 	return (
-		<section aria-labelledby="flow-title" className="bg-surface">
+		<section aria-labelledby={SECTION_ID.flow} className="bg-surface">
 			<div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
 				<h2
-					id="flow-title"
+					id={SECTION_ID.flow}
 					className="scroll-mt-24 text-center text-2xl font-bold tracking-tight [word-break:auto-phrase] sm:text-3xl"
 				>
 					3つの手順で、日報がまとまります

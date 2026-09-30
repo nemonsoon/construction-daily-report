@@ -1,7 +1,15 @@
+import { FILE_NAME } from "@/config/files.ts";
 import {
 	type Finding,
 	InputFormatError,
 } from "@/features/daily-report/index.ts";
+
+// できあがったファイルを、手順の中の札として出すための形
+export type OutputFile = {
+	name: string;
+	note: string;
+	bytes: Uint8Array<ArrayBuffer>;
+};
 
 type Pending =
 	| { kind: "idle" }
@@ -10,13 +18,13 @@ type Pending =
 
 export type CheckState =
 	| Pending
-	| { kind: "found"; findings: Finding[] }
-	| { kind: "clean" };
+	| { kind: "found"; findings: Finding[]; review: OutputFile }
+	| { kind: "clean"; review: OutputFile };
 
 export type ReportState =
 	| Pending
 	| { kind: "remaining"; findings: Finding[] }
-	| { kind: "done" };
+	| { kind: "done"; files: OutputFile[] };
 
 export type FlowState = {
 	sampleTaken: boolean;
@@ -27,11 +35,19 @@ export type FlowState = {
 export type FlowEvent =
 	| { type: "sampleTaken" }
 	| { type: "checkStarted" }
-	| { type: "checkFinished"; findings: Finding[] }
+	| {
+			type: "checkFinished";
+			findings: Finding[];
+			review: Uint8Array<ArrayBuffer>;
+	  }
 	| { type: "checkFailed"; message: string }
 	| { type: "reportStarted" }
 	| { type: "reportRemaining"; findings: Finding[] }
-	| { type: "reportDone" }
+	| {
+			type: "reportDone";
+			daily: Uint8Array<ArrayBuffer>;
+			summary: Uint8Array<ArrayBuffer>;
+	  }
 	| { type: "reportFailed"; message: string };
 
 export type StepMark = "todo" | "current" | "done";
@@ -42,6 +58,32 @@ export const initialFlow: FlowState = {
 	report: { kind: "idle" },
 };
 
+export function reviewFile(bytes: Uint8Array<ArrayBuffer>): OutputFile {
+	return {
+		name: FILE_NAME.review,
+		note: "直してほしいセルが黄色く塗られています",
+		bytes,
+	};
+}
+
+export function reportFiles(
+	daily: Uint8Array<ArrayBuffer>,
+	summary: Uint8Array<ArrayBuffer>,
+): OutputFile[] {
+	return [
+		{
+			name: FILE_NAME.daily,
+			note: "現場ごとのシートに1日1ページ",
+			bytes: daily,
+		},
+		{
+			name: FILE_NAME.summary,
+			note: "月ごとに現場別と作業員別の集計",
+			bytes: summary,
+		},
+	];
+}
+
 export function flowReducer(state: FlowState, event: FlowEvent): FlowState {
 	switch (event.type) {
 		case "sampleTaken":
@@ -49,14 +91,16 @@ export function flowReducer(state: FlowState, event: FlowEvent): FlowState {
 		case "checkStarted":
 			// 手順2をやり直したら、前のファイルから出した手順3の結果は古くなる
 			return { ...state, check: { kind: "loading" }, report: { kind: "idle" } };
-		case "checkFinished":
+		case "checkFinished": {
+			const review = reviewFile(event.review);
 			return {
 				...state,
 				check:
 					event.findings.length === 0
-						? { kind: "clean" }
-						: { kind: "found", findings: event.findings },
+						? { kind: "clean", review }
+						: { kind: "found", findings: event.findings, review },
 			};
+		}
 		case "checkFailed":
 			return { ...state, check: { kind: "error", message: event.message } };
 		case "reportStarted":
@@ -67,7 +111,13 @@ export function flowReducer(state: FlowState, event: FlowEvent): FlowState {
 				report: { kind: "remaining", findings: event.findings },
 			};
 		case "reportDone":
-			return { ...state, report: { kind: "done" } };
+			return {
+				...state,
+				report: {
+					kind: "done",
+					files: reportFiles(event.daily, event.summary),
+				},
+			};
 		case "reportFailed":
 			return { ...state, report: { kind: "error", message: event.message } };
 	}

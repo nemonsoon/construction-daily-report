@@ -1,24 +1,9 @@
-import { Check, ChevronRight, Lock } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { APP_HASH } from "@/lib/screen.ts";
+import { Assurances } from "./assurances.tsx";
 
 type Props = { className?: string };
-
-// 冒頭と締めの帯で、押す前の心配（登録・ファイルの送り先）に答える一行
-export function Assurances({ className }: Props) {
-	return (
-		<p className={className}>
-			<span className="inline-flex items-center gap-1.5">
-				<Check aria-hidden className="size-4 shrink-0" strokeWidth={1.75} />
-				登録不要
-			</span>
-			<span className="inline-flex items-center gap-1.5">
-				<Lock aria-hidden className="size-4 shrink-0" strokeWidth={1.75} />
-				ファイルはどこにも送りません
-			</span>
-		</p>
-	);
-}
 
 // 説明のページでできる行動はこれだけにする
 export function TryButton({ className }: Props) {

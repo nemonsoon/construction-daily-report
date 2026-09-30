@@ -1,15 +1,16 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SECTION_ID } from "@/config/sections.ts";
 import { APP_HASH } from "@/lib/screen.ts";
-import { Assurances } from "./try-button.tsx";
+import { Assurances } from "./assurances.tsx";
 
 // 下まで読んだ人が、上へ戻らずに「見本で試す」を押せるようにする
 export function ClosingCta() {
 	return (
-		<section aria-labelledby="closing-title" className="bg-ink text-white">
+		<section aria-labelledby={SECTION_ID.closing} className="bg-ink text-white">
 			<div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-20">
 				<h2
-					id="closing-title"
+					id={SECTION_ID.closing}
 					className="text-2xl font-bold tracking-tight sm:text-3xl"
 				>
 					まずは見本の日報で試してみてください

@@ -1,8 +1,7 @@
-const XLSX_TYPE =
-	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+import { XLSX_MIME_TYPE } from "@/config/files.ts";
 
 export function download(bytes: Uint8Array<ArrayBuffer>, name: string): void {
-	const url = URL.createObjectURL(new Blob([bytes], { type: XLSX_TYPE }));
+	const url = URL.createObjectURL(new Blob([bytes], { type: XLSX_MIME_TYPE }));
 	const link = document.createElement("a");
 	link.href = url;
 	link.download = name;

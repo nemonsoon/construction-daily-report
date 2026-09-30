@@ -1,5 +1,6 @@
 import { FileSpreadsheet, Upload } from "lucide-react";
 import { useState } from "react";
+import { XLSX_EXTENSION } from "@/config/files.ts";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -62,7 +63,7 @@ export function FileDrop({ id, label, disabled, primary, onFile }: Props) {
 			<input
 				id={id}
 				type="file"
-				accept=".xlsx"
+				accept={XLSX_EXTENSION}
 				className="sr-only"
 				disabled={disabled}
 				onChange={(event) => {

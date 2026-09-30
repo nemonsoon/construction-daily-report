@@ -1,4 +1,5 @@
 import { Clock, CopyX, SquareDashed } from "lucide-react";
+import { SECTION_ID } from "@/config/sections.ts";
 
 const CHECKS = [
 	{ icon: SquareDashed, title: "空欄", body: "書くべき欄が空いている" },
@@ -16,10 +17,10 @@ const CHECKS = [
 
 export function ChecksSection() {
 	return (
-		<section aria-labelledby="checks-title" className="bg-surface">
+		<section aria-labelledby={SECTION_ID.checks} className="bg-surface">
 			<div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
 				<h2
-					id="checks-title"
+					id={SECTION_ID.checks}
 					className="scroll-mt-24 text-center text-2xl font-bold tracking-tight [word-break:auto-phrase] sm:text-3xl"
 				>
 					書き忘れは、まとめる前に分かります

@@ -1,42 +1,41 @@
 import { ArrowUpRight } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark.tsx";
+import { LINK } from "@/config/links.ts";
+import { SECTION_ID } from "@/config/sections.ts";
 import { APP_HASH } from "@/lib/screen.ts";
 
-export const REPO = "https://github.com/nemonsoon/construction-daily-report";
-export const USER_GUIDE = `${REPO}/blob/main/docs/user-guide.md`;
-
-// リンク先はページの中の区画と README・ライセンスだけにし、無いページへのリンクは作らない
+// リンク先はページの中の区画と GitHub の説明書・ライセンスだけにし、無いページへのリンクは作らない
 const COLUMNS = [
 	{
 		title: "日報まとめ",
 		links: [
 			{ label: "見本で試す", href: APP_HASH },
-			{ label: "使い方の3手順", href: "#flow-title" },
-			{ label: "できあがる日報と集計表", href: "#outputs-title" },
-			{ label: "書き忘れのお知らせ", href: "#checks-title" },
-			{ label: "よくある質問", href: "#faq-title" },
+			{ label: "使い方の3手順", href: `#${SECTION_ID.flow}` },
+			{ label: "できあがる日報と集計表", href: `#${SECTION_ID.outputs}` },
+			{ label: "書き忘れのお知らせ", href: `#${SECTION_ID.checks}` },
+			{ label: "よくある質問", href: `#${SECTION_ID.faq}` },
 		],
 	},
 	{
 		title: "詳しい説明",
 		links: [
-			{ label: "使い方", href: `${USER_GUIDE}#使い方` },
-			{ label: "読み込める日報の形", href: `${USER_GUIDE}#読み込める日報の形` },
+			{ label: "使い方", href: LINK.usage },
+			{ label: "読み込める日報の形", href: LINK.inputFormat },
 			{
 				label: "様式を合わせるとき",
-				href: `${USER_GUIDE}#御社の様式に合わせるとき`,
+				href: LINK.customForm,
 			},
 		],
 	},
 	{
 		title: "開発",
 		links: [
-			{ label: "ソースコード（GitHub）", href: REPO },
+			{ label: "ソースコード（GitHub）", href: LINK.repo },
 			{
 				label: "自分のパソコンで動かす",
-				href: `${REPO}/blob/main/docs/development.md`,
+				href: LINK.development,
 			},
-			{ label: "ライセンス（MIT）", href: `${REPO}/blob/main/LICENSE` },
+			{ label: "ライセンス（MIT）", href: LINK.license },
 		],
 	},
 ];

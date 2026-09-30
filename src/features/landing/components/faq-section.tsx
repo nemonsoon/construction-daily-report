@@ -1,4 +1,5 @@
 import { FileSpreadsheet, Globe, LayoutTemplate, Lock } from "lucide-react";
+import { SECTION_ID } from "@/config/sections.ts";
 
 // 答えは短く4つだけなので、開いたり閉じたりせず最初から並べて見せる
 const FAQS = [
@@ -29,11 +30,11 @@ const FAQS = [
 export function FaqSection() {
 	return (
 		<section
-			aria-labelledby="faq-title"
+			aria-labelledby={SECTION_ID.faq}
 			className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20"
 		>
 			<h2
-				id="faq-title"
+				id={SECTION_ID.faq}
 				className="scroll-mt-24 text-center text-2xl font-bold tracking-tight [word-break:auto-phrase] sm:text-3xl"
 			>
 				よくある質問

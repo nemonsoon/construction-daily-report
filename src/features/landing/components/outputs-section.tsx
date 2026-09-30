@@ -1,5 +1,7 @@
-// Numbers で開いて表の部分だけを撮った画像。README と同じものを使う
 import { FileSpreadsheet } from "lucide-react";
+import { FILE_NAME } from "@/config/files.ts";
+import { SECTION_ID } from "@/config/sections.ts";
+// Numbers で開いて表の部分だけを撮った画像。README と同じものを使う
 import dailyReportImage from "../../../../docs/images/daily-report.png";
 import summaryImage from "../../../../docs/images/summary.png";
 
@@ -8,7 +10,7 @@ const SHOTS = [
 		src: dailyReportImage,
 		width: 1333,
 		height: 784,
-		name: "日報.xlsx",
+		name: FILE_NAME.daily,
 		note: "現場ごとのシートに1日1ページ。A4 縦で印刷できます",
 		alt: "日報.xlsx の1日分。右上に作成と確認の押印の欄、日付と曜日・天候・現場名、作業員ごとの開始と終了の時刻・休憩・作業時間・作業内容、人数と合計、安全と備考の欄が罫線つきで並ぶ",
 	},
@@ -16,7 +18,7 @@ const SHOTS = [
 		src: summaryImage,
 		width: 906,
 		height: 721,
-		name: "集計表.xlsx",
+		name: FILE_NAME.summary,
 		note: "月ごとに1シート。現場別の延べ人数と作業員別の出勤日数",
 		alt: "集計表.xlsx の2026年9月のシート。題名、対象の日報の期間と作成日の下に、現場別の延べ人数と作業時間の表と、作業員別の出勤日数と作業時間の表が、それぞれ合計の行つきで並ぶ",
 	},
@@ -25,11 +27,11 @@ const SHOTS = [
 export function OutputsSection() {
 	return (
 		<section
-			aria-labelledby="outputs-title"
+			aria-labelledby={SECTION_ID.outputs}
 			className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20"
 		>
 			<h2
-				id="outputs-title"
+				id={SECTION_ID.outputs}
 				className="scroll-mt-24 text-center text-2xl font-bold tracking-tight [word-break:auto-phrase] sm:text-3xl"
 			>
 				提出用の日報と、月の集計表ができあがります

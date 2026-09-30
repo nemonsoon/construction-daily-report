@@ -1,3 +1,4 @@
+import { FILE_NAME } from "@/config/files.ts";
 import { cn } from "@/lib/utils";
 
 // 見本_工事日報.xlsx を直してまとめたときに、実際に出てくる値を使う
@@ -31,7 +32,7 @@ function FileLabel({ name }: { name: string }) {
 function DailyReport() {
 	return (
 		<div className="relative rounded-lg border border-line bg-white p-4 pt-5 pb-12 shadow-xl sm:p-6 sm:pb-16">
-			<FileLabel name="日報.xlsx" />
+			<FileLabel name={FILE_NAME.daily} />
 			<div className="flex items-start justify-between gap-3">
 				<p className="pt-1 text-base font-bold tracking-widest sm:text-lg">
 					工事日報
@@ -136,7 +137,7 @@ function DailyReport() {
 function Summary() {
 	return (
 		<div className="relative rounded-lg border border-line bg-white p-4 pt-5 shadow-xl sm:p-5">
-			<FileLabel name="集計表.xlsx" />
+			<FileLabel name={FILE_NAME.summary} />
 			<p className="text-sm font-bold sm:text-base">2026年9月 工数集計表</p>
 			<p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
 				対象の日報　2026年9月1日〜2026年9月14日
