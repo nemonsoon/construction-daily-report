@@ -50,7 +50,7 @@ export function SiteFooter({ compact }: { compact: boolean }) {
 						日報まとめ
 					</p>
 					<p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
-						現場の日報を、提出用の日報と集計表に。
+						現場で書いたExcelを、提出用の日報と集計表に。
 						<br />
 						登録不要で、ファイルはブラウザの外に出ません。
 					</p>
