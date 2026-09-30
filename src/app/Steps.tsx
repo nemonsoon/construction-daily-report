@@ -5,7 +5,7 @@ import {
 	LayoutTemplate,
 	Loader2,
 } from "lucide-react";
-import { type ReactNode, useEffect, useReducer } from "react";
+import { type ReactNode, useEffect, useReducer, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { runCheck, runReport } from "../pipeline.ts";
 import { makeSampleWorkbook } from "../sample-data.ts";
@@ -58,29 +58,40 @@ function Notice({
 	);
 }
 
-// ファイルはもうダウンロード済みなので、押せる見た目にはしない
-const OUTPUTS = [
-	{ name: "日報.xlsx", note: "1日・1現場ごとに1枚のシート" },
-	{ name: "集計表.xlsx", note: "延べ人数と作業時間の合計" },
-];
+type OutputFile = {
+	name: string;
+	note: string;
+	bytes: Uint8Array<ArrayBuffer>;
+};
 
-function Outputs() {
+// 自動のダウンロードをブラウザが止めても一周が止まらないよう、札ごとに取り直せるようにする
+function Outputs({ files }: { files: OutputFile[] }) {
 	return (
-		<ul className="grid gap-3 sm:grid-cols-2">
-			{OUTPUTS.map(({ name, note }) => (
+		<ul className="space-y-3">
+			{files.map(({ name, note, bytes }) => (
 				<li
 					key={name}
-					className="flex items-center gap-3 rounded-lg bg-white px-4 py-3"
+					className="flex items-center gap-3 rounded-lg border border-line bg-white px-4 py-3"
 				>
 					<FileSpreadsheet
 						aria-hidden
 						className="size-6 shrink-0"
 						strokeWidth={1.75}
 					/>
-					<span>
+					<span className="min-w-0 flex-1">
 						<span className="block font-bold">{name}</span>
 						<span className="block text-sm text-muted-foreground">{note}</span>
 					</span>
+					<Button
+						variant="outline"
+						onClick={() => download(bytes, name)}
+						aria-label={`${name} をダウンロード`}
+						className="size-11 sm:w-auto sm:px-4"
+					>
+						<Download aria-hidden />
+						{/* スマートフォン幅ではアイコンだけにして、ファイル名と説明の幅を空ける */}
+						<span className="hidden sm:inline">ダウンロード</span>
+					</Button>
 				</li>
 			))}
 		</ul>
@@ -106,6 +117,8 @@ export function Steps() {
 	const marks = stepMarks(state);
 	const [sampleMark, checkMark, reportMark] = marks;
 	const busy = isBusy(state);
+	const [review, setReview] = useState<OutputFile[]>([]);
+	const [reports, setReports] = useState<OutputFile[]>([]);
 
 	// 受け取り枠の外にファイルを落とすと、ブラウザがそのファイルを開いてページが消えるため止める
 	useEffect(() => {
@@ -131,6 +144,13 @@ export function Steps() {
 		try {
 			const { findings, review } = await runCheck(await file.arrayBuffer());
 			download(review, "要確認.xlsx");
+			setReview([
+				{
+					name: "要確認.xlsx",
+					note: "直してほしいセルが黄色く塗られています",
+					bytes: review,
+				},
+			]);
 			dispatch({ type: "checkFinished", findings });
 		} catch (error) {
 			dispatch({ type: "checkFailed", message: errorMessage(error) });
@@ -147,6 +167,18 @@ export function Steps() {
 			}
 			download(result.daily, "日報.xlsx");
 			download(result.summary, "集計表.xlsx");
+			setReports([
+				{
+					name: "日報.xlsx",
+					note: "1日・1現場ごとに1枚のシート",
+					bytes: result.daily,
+				},
+				{
+					name: "集計表.xlsx",
+					note: "延べ人数と作業時間の合計",
+					bytes: result.summary,
+				},
+			]);
 			dispatch({ type: "reportDone" });
 		} catch (error) {
 			dispatch({ type: "reportFailed", message: errorMessage(error) });
@@ -205,8 +237,11 @@ export function Steps() {
 						)}
 						{state.check.kind === "clean" && (
 							<Notice tone="done">
-								書き忘れや食い違いは見つかりませんでした。要確認.xlsx
-								をそのまま手順3に置けます。
+								<p>
+									書き忘れや食い違いは見つかりませんでした。要確認.xlsx
+									をそのまま手順3に置けます。
+								</p>
+								<Outputs files={review} />
 							</Notice>
 						)}
 						{state.check.kind === "found" && (
@@ -215,6 +250,7 @@ export function Steps() {
 									title={`確かめてほしい所が ${state.check.findings.length} か所あります`}
 									findings={state.check.findings}
 								/>
+								<Outputs files={review} />
 								<p>要確認.xlsx の黄色いセルを直して保存してください。</p>
 							</div>
 						)}
@@ -246,7 +282,7 @@ export function Steps() {
 						{state.report.kind === "done" && (
 							<Notice tone="done">
 								<p>日報.xlsx と集計表.xlsx をダウンロードしました。</p>
-								<Outputs />
+								<Outputs files={reports} />
 							</Notice>
 						)}
 					</StepCard>
