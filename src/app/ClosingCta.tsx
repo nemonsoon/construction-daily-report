@@ -24,7 +24,7 @@ export function ClosingCta() {
 				</Button>
 				<p className="mt-4 flex justify-center gap-x-4 text-sm text-white/60">
 					<span>登録不要</span>
-					<span>ファイルは外に出ません</span>
+					<span>ファイルはどこにも送りません</span>
 				</p>
 			</div>
 		</section>

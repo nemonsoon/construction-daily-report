@@ -16,7 +16,7 @@ export function TryButton({ className }: Props) {
 			</Button>
 			<p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
 				<span>登録不要</span>
-				<span>ファイルは外に出ません</span>
+				<span>ファイルはどこにも送りません</span>
 			</p>
 		</div>
 	);

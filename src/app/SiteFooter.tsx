@@ -52,7 +52,7 @@ export function SiteFooter({ compact }: { compact: boolean }) {
 					<p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
 						現場で書いたExcelを、提出用の日報と集計表に。
 						<br />
-						登録不要で、ファイルはブラウザの外に出ません。
+						登録不要で、ファイルはどこにも送りません。
 					</p>
 				</div>
 				<nav
