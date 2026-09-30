@@ -33,6 +33,29 @@ function okDate(date: Date): Parsed<string> {
 	return ok(isoDate(date));
 }
 
+// 和暦の元年の西暦。令和は2019年5月、平成は1989年1月から
+const ERAS: Record<string, number> = {
+	令和: 2019,
+	R: 2019,
+	平成: 1989,
+	H: 1989,
+};
+
+function parseYearMonthDay(text: string): [number, number, number] | null {
+	const western = /^(\d{4})[/\-.年](\d{1,2})[/\-.月](\d{1,2})日?$/.exec(text);
+	if (western) {
+		return [Number(western[1]), Number(western[2]), Number(western[3])];
+	}
+	const japanese =
+		/^(令和|平成|R|H)(元|\d{1,2})[/\-.年](\d{1,2})[/\-.月](\d{1,2})日?$/i.exec(
+			text,
+		);
+	if (!japanese) return null;
+	const first = ERAS[japanese[1].toUpperCase()] ?? ERAS[japanese[1]];
+	const eraYear = japanese[2] === "元" ? 1 : Number(japanese[2]);
+	return [first + eraYear - 1, Number(japanese[3]), Number(japanese[4])];
+}
+
 export function parseDate(raw: RawValue): Parsed<string> {
 	const value = normalized(raw);
 	if (value === null || value === "") return BLANK;
@@ -40,13 +63,11 @@ export function parseDate(raw: RawValue): Parsed<string> {
 	if (typeof value === "number") {
 		return okDate(new Date(EXCEL_EPOCH + Math.floor(value) * DAY_MS));
 	}
-	const match = /^(\d{4})[/\-.年](\d{1,2})[/\-.月](\d{1,2})日?$/.exec(value);
-	if (!match) return UNREADABLE;
-	const [year, month, day] = [
-		Number(match[1]),
-		Number(match[2]),
-		Number(match[3]),
-	];
+	// 「2026/9/1（火）」のように後ろに付いた曜日は読み飛ばす（全角の括弧は NFKC で半角になる）
+	const text = value.replace(/\s*\([日月火水木金土]\)$/, "");
+	const ymd = parseYearMonthDay(text);
+	if (!ymd) return UNREADABLE;
+	const [year, month, day] = ymd;
 	const date = new Date(Date.UTC(year, month - 1, day));
 	if (date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
 		return UNREADABLE;
@@ -74,7 +95,9 @@ export function parseTime(raw: RawValue): Parsed<number> {
 			? ok(Math.round(value * MINUTES_PER_DAY))
 			: UNREADABLE;
 	}
-	const match = /^(翌)?(\d{1,2})(?::(\d{2})|時(?:(\d{1,2})分)?)$/.exec(value);
+	// 「8:00:00」の秒は読み飛ばす
+	const match =
+		/^(翌)?(\d{1,2})(?::(\d{2})(?::\d{2})?|時(?:(\d{1,2})分)?)$/.exec(value);
 	if (!match) return UNREADABLE;
 	const nextDay = match[1] !== undefined;
 	const hours = Number(match[2]);
