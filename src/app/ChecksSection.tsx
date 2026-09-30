@@ -25,7 +25,8 @@ export function ChecksSection() {
 					書き忘れは、まとめる前に分かります
 				</h2>
 				<p className="mt-4 text-center text-muted-foreground [word-break:auto-phrase]">
-					見つけたセルは、要確認.xlsx で黄色く塗ってお知らせします。
+					書き忘れや食い違いのあるセルは、要確認.xlsx
+					で黄色く塗ってお知らせします。
 				</p>
 				<ul className="mt-10 grid gap-6 md:grid-cols-3 md:gap-0 md:divide-x md:divide-line">
 					{CHECKS.map(({ icon: Icon, title, body }) => (
