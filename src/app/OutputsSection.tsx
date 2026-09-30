@@ -1,23 +1,23 @@
-// Numbers の窓の枠を切った版。README では枠つきの元の画像を使う
-import dailyReportImage from "../../docs/images/daily-report-sheet.png";
-import summaryImage from "../../docs/images/summary-sheet.png";
+// Numbers で開いて表の部分だけを撮った画像。README と同じものを使う
+import dailyReportImage from "../../docs/images/daily-report.png";
+import summaryImage from "../../docs/images/summary.png";
 
 const SHOTS = [
 	{
 		src: dailyReportImage,
-		width: 980,
-		height: 753,
+		width: 1333,
+		height: 784,
 		name: "日報.xlsx",
 		note: "現場ごとのシートに1日1ページ。A4 縦で印刷できます",
-		alt: "日報.xlsx の1枚。日付・現場名・天候、作業員ごとの時刻と作業時間、人数と合計、作業内容・安全・備考が並ぶ",
+		alt: "日報.xlsx の1日分。右上に作成と確認の押印の欄、日付と曜日・天候・現場名、作業員ごとの開始と終了の時刻・休憩・作業時間・作業内容、人数と合計、安全と備考の欄が罫線つきで並ぶ",
 	},
 	{
 		src: summaryImage,
-		width: 1070,
-		height: 389,
+		width: 906,
+		height: 721,
 		name: "集計表.xlsx",
 		note: "月ごとに現場別と作業員別の延べ人数と作業時間",
-		alt: "集計表.xlsx。現場名・月・延べ人数・作業時間の列に、現場ごと・月ごとの数字が並び、最後の行に合計が入る",
+		alt: "集計表.xlsx の2026年9月のシート。題名、対象の日報の期間と作成日の下に、現場別の延べ人数と作業時間の表と、作業員別の出勤日数と作業時間の表が、それぞれ合計の行つきで並ぶ",
 	},
 ];
 
@@ -33,7 +33,8 @@ export function OutputsSection() {
 			>
 				提出用の日報と、月の集計表ができあがります
 			</h2>
-			<div className="mt-10 grid gap-8 md:grid-cols-2">
+			{/* 2枚の画像の文字の大きさがそろうよう、カードの幅を画像の横幅の比（1333 : 906）で分ける */}
+			<div className="mt-10 grid gap-8 md:grid-cols-[1333fr_906fr]">
 				{SHOTS.map(({ src, width, height, name, note, alt }) => (
 					<figure key={name} className="flex flex-col">
 						{/* 横2列のときは2枚のカードの高さをそろえ、背の低い集計表は上に寄せる */}
@@ -44,14 +45,16 @@ export function OutputsSection() {
 								</span>
 							</p>
 							{/* 幅と高さを渡し、読み込む前から場所を取って画面がずれないようにする */}
-							<img
-								src={src}
-								width={width}
-								height={height}
-								alt={alt}
-								loading="lazy"
-								className="h-auto w-full"
-							/>
+							<div className="p-3 sm:p-4">
+								<img
+									src={src}
+									width={width}
+									height={height}
+									alt={alt}
+									loading="lazy"
+									className="h-auto w-full"
+								/>
+							</div>
 						</div>
 						<figcaption className="mt-3 text-center">
 							<span className="text-sm text-muted-foreground">{note}</span>
