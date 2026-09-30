@@ -36,10 +36,14 @@ const COLUMNS = [
 	},
 ];
 
-export function SiteFooter() {
+// アプリの画面では、一周の途中で気を散らさないよう最下段の細い帯だけにする
+export function SiteFooter({ compact }: { compact: boolean }) {
 	return (
 		<footer className="border-t border-line bg-white [word-break:auto-phrase]">
-			<div className="mx-auto grid max-w-6xl gap-10 px-4 pt-14 pb-10 sm:px-6 lg:grid-cols-[1.2fr_2fr]">
+			<div
+				hidden={compact}
+				className="mx-auto grid max-w-6xl gap-10 px-4 pt-14 pb-10 sm:px-6 lg:grid-cols-[1.2fr_2fr]"
+			>
 				<div>
 					<p className="flex items-center gap-2 text-lg font-bold tracking-tight text-brand">
 						<BrandMark className="size-7" />
@@ -74,7 +78,7 @@ export function SiteFooter() {
 					))}
 				</nav>
 			</div>
-			<div className="border-t border-line">
+			<div className={compact ? undefined : "border-t border-line"}>
 				<div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:justify-between sm:px-6">
 					<p>© 2026 日報まとめ</p>
 					<p>見本のファイルは架空のデータです。</p>

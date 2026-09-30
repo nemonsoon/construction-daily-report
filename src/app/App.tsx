@@ -29,7 +29,7 @@ export function App() {
 					<Steps />
 				</div>
 			</main>
-			<SiteFooter />
+			<SiteFooter compact={screen === "app"} />
 		</>
 	);
 }
