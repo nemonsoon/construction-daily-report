@@ -4,8 +4,8 @@ const CHECKS = [
 	{ icon: SquareDashed, title: "空欄", body: "書くべき欄が空いている" },
 	{
 		icon: Clock,
-		title: "時刻の矛盾",
-		body: "終了が開始より早いなど、時刻が合わない",
+		title: "時刻の間違い",
+		body: "終了が開始より早い、休憩が長すぎるなど",
 	},
 	{
 		icon: CopyX,
@@ -41,7 +41,9 @@ export function ChecksSection() {
 							/>
 							<div>
 								<h3 className="text-lg font-bold">{title}</h3>
-								<p className="mt-1 text-muted-foreground">{body}</p>
+								<p className="mt-1 text-muted-foreground [word-break:auto-phrase]">
+									{body}
+								</p>
 							</div>
 						</li>
 					))}
