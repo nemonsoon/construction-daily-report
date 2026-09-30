@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import type { Finding } from "@/features/daily-report/checks/finding.ts";
+import { InputFormatError } from "@/features/daily-report/input/read-input.ts";
 import {
 	errorMessage,
 	type FlowEvent,
@@ -8,8 +10,6 @@ import {
 	isBusy,
 	stepMarks,
 } from "../../src/app/flow.ts";
-import type { Finding } from "../../src/finding.ts";
-import { InputFormatError } from "../../src/read-input.ts";
 
 const finding: Finding = {
 	rowNumber: 3,

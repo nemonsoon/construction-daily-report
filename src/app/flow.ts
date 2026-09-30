@@ -1,5 +1,7 @@
-import type { Finding } from "../finding.ts";
-import { InputFormatError } from "../read-input.ts";
+import {
+	type Finding,
+	InputFormatError,
+} from "@/features/daily-report/index.ts";
 
 type Pending =
 	| { kind: "idle" }

@@ -8,9 +8,11 @@ import {
 } from "lucide-react";
 import { type ReactNode, useEffect, useReducer, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { runCheck, runReport } from "../pipeline.ts";
-import { makeSampleWorkbook } from "../sample-data.ts";
-import { toBytes } from "../sheet.ts";
+import {
+	makeSampleFile,
+	runCheck,
+	runReport,
+} from "@/features/daily-report/index.ts";
 import { download } from "./download.ts";
 import { FileDrop } from "./FileDrop.tsx";
 import { FindingList } from "./FindingList.tsx";
@@ -150,10 +152,7 @@ export function Steps() {
 	}, [finished]);
 
 	async function takeSample() {
-		download(
-			await toBytes(makeSampleWorkbook().workbook),
-			"見本_工事日報.xlsx",
-		);
+		download(await makeSampleFile(), "見本_工事日報.xlsx");
 		dispatch({ type: "sampleTaken" });
 	}
 

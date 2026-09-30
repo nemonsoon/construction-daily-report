@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { Finding } from "../finding.ts";
+import type { Finding } from "@/features/daily-report/index.ts";
 
 // 枠の中でスクロールさせると続きに気付かれにくいため、先頭だけ出して残りはボタンで開く
 const FIRST_ROWS = 10;
