@@ -145,3 +145,17 @@ describe("buildDailyReports", () => {
 		expect(sheet?.getCell("E8").value).toBe(7);
 	});
 });
+
+describe("buildDailyReports で同じ人が1日に2回来た現場", () => {
+	it("行は2つ並べ、人数は1人と数える", () => {
+		const rows = toCheckedRows([
+			workRow({ rowNumber: 2, start: 480, end: 720, breakMinutes: 0 }),
+			workRow({ rowNumber: 3, start: 900, end: 1020, breakMinutes: 0 }),
+		]);
+		const sheet = buildDailyReports(rows).worksheets[0];
+		expect(sheet.getCell("A8").value).toBe("田中 一郎");
+		expect(sheet.getCell("A9").value).toBe("田中 一郎");
+		expect(sheet.getCell("B10").value).toBe("1人");
+		expect(sheet.getCell("E10").value).toBe(6);
+	});
+});

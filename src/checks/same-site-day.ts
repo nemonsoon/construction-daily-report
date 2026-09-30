@@ -24,15 +24,27 @@ export function checkSameSiteDay(rows: WorkRow[]): Finding[] {
 			}
 		}
 
-		const named = group.filter((row) => row.worker !== null);
-		for (const same of Map.groupBy(named, (row) => row.worker).values()) {
-			if (same.length < 2) continue;
-			const numbers = same.map((row) => row.rowNumber).join("・");
-			for (const row of same) {
+		// 午前と夕方に分けて書いた行は通し、時間が重なる行（同じ行の書き写しなど）だけを指摘する。
+		// 時刻の無い行は空欄の検査が知らせるので、ここでは比べない
+		const timed = group.filter(
+			(row) => row.worker !== null && row.start !== null && row.end !== null,
+		);
+		for (const same of Map.groupBy(timed, (row) => row.worker).values()) {
+			const overlapping = same.filter((a) =>
+				same.some(
+					(b) =>
+						a !== b &&
+						(a.start ?? 0) < (b.end ?? 0) &&
+						(b.start ?? 0) < (a.end ?? 0),
+				),
+			);
+			if (overlapping.length < 2) continue;
+			const numbers = overlapping.map((row) => row.rowNumber).join("・");
+			for (const row of overlapping) {
 				findings.push({
 					rowNumber: row.rowNumber,
 					column: "作業員名",
-					message: `同じ日・同じ現場に同じ作業員の行が複数あります（${numbers}行目）`,
+					message: `同じ日・同じ現場に、時間の重なる同じ作業員の行があります（${numbers}行目）`,
 				});
 			}
 		}

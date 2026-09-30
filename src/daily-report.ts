@@ -137,11 +137,18 @@ function writeDay(
 		row++;
 	}
 	put(sheet, row, 1, "合計", { label: true, bold: true });
-	merge(sheet, row, 2, 4, `${group.length}人`, {
-		border: true,
-		align: "center",
-		bold: true,
-	});
+	merge(
+		sheet,
+		row,
+		2,
+		4,
+		`${new Set(group.map((line) => line.worker)).size}人`,
+		{
+			border: true,
+			align: "center",
+			bold: true,
+		},
+	);
 	put(sheet, row, 5, totalMinutes / 60, {
 		border: true,
 		numFmt: HOURS_FORMAT,

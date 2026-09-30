@@ -136,3 +136,17 @@ describe("buildSummaryWorkbook", () => {
 		expect(sheet.headerFooter.oddFooter).toContain("&P");
 	});
 });
+
+describe("summarize で同じ人が1日に2回来た現場", () => {
+	it("延べ人数は1人と数え、作業時間は足す", () => {
+		const [september] = summarize(
+			toCheckedRows([
+				workRow({ rowNumber: 2, start: 480, end: 720, breakMinutes: 0 }),
+				workRow({ rowNumber: 3, start: 900, end: 1020, breakMinutes: 0 }),
+			]),
+		);
+		expect(september.sites).toEqual([
+			{ name: "山田邸 新築工事", count: 1, hours: 6 },
+		]);
+	});
+});

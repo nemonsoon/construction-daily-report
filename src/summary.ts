@@ -52,10 +52,12 @@ export function summarize(rows: CheckedRow[]): MonthSummary[] {
 				month,
 				from: dates[0],
 				to: dates[dates.length - 1],
+				// 延べ人数は日ごとの人数の合計。同じ日に2回来た人は1人と数える
 				sites: tally(
 					group,
 					(row) => row.site,
-					(lines) => lines.length,
+					(lines) =>
+						new Set(lines.map((row) => `${row.date}\t${row.worker}`)).size,
 				),
 				// 同じ日に2つの現場へ回った人も、出勤日数では1日と数える
 				workers: tally(

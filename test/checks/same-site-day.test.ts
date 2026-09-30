@@ -23,7 +23,7 @@ describe("checkSameSiteDay", () => {
 		]);
 	});
 
-	it("同じ作業員の行が2つあれば、両方を指摘する", () => {
+	it("同じ作業員の行が2つあり時間が重なれば、両方を指摘する", () => {
 		const findings = checkSameSiteDay([
 			workRow({ rowNumber: 2 }),
 			workRow({ rowNumber: 7 }),
@@ -32,14 +32,24 @@ describe("checkSameSiteDay", () => {
 			{
 				rowNumber: 2,
 				column: "作業員名",
-				message: "同じ日・同じ現場に同じ作業員の行が複数あります（2・7行目）",
+				message:
+					"同じ日・同じ現場に、時間の重なる同じ作業員の行があります（2・7行目）",
 			},
 			{
 				rowNumber: 7,
 				column: "作業員名",
-				message: "同じ日・同じ現場に同じ作業員の行が複数あります（2・7行目）",
+				message:
+					"同じ日・同じ現場に、時間の重なる同じ作業員の行があります（2・7行目）",
 			},
 		]);
+	});
+
+	it("午前と夕方のように時間が分かれていれば、同じ作業員の行が2つあっても指摘しない", () => {
+		const findings = checkSameSiteDay([
+			workRow({ rowNumber: 2, start: 480, end: 720, breakMinutes: 0 }),
+			workRow({ rowNumber: 5, start: 900, end: 1020, breakMinutes: 0 }),
+		]);
+		expect(findings).toEqual([]);
 	});
 
 	it("日付か現場が違えば比べない", () => {
