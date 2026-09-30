@@ -11,17 +11,17 @@ const COLUMNS = [
 			{ label: "見本で試す", href: APP_HASH },
 			{ label: "使い方の3手順", href: "#flow-title" },
 			{ label: "できあがる日報と集計表", href: "#outputs-title" },
-			{ label: "見つける書き忘れ", href: "#checks-title" },
+			{ label: "書き忘れのお知らせ", href: "#checks-title" },
 			{ label: "よくある質問", href: "#faq-title" },
 		],
 	},
 	{
-		title: "使い方",
+		title: "詳しい説明",
 		links: [
-			{ label: "使い方の流れ", href: `${REPO}#使い方` },
-			{ label: "入力の Excel の形", href: `${REPO}#入力の-excel-の形` },
+			{ label: "使い方", href: `${REPO}#使い方` },
+			{ label: "読み込める日報の形", href: `${REPO}#入力の-excel-の形` },
 			{
-				label: "御社の様式に合わせるとき",
+				label: "様式を合わせるとき",
 				href: `${REPO}#御社の様式に合わせるとき`,
 			},
 		],
@@ -30,7 +30,10 @@ const COLUMNS = [
 		title: "開発",
 		links: [
 			{ label: "ソースコード（GitHub）", href: REPO },
-			{ label: "手元で動かす", href: `${REPO}#手元で動かす開発者向け` },
+			{
+				label: "自分のパソコンで動かす",
+				href: `${REPO}#手元で動かす開発者向け`,
+			},
 			{ label: "ライセンス（MIT）", href: `${REPO}/blob/main/LICENSE` },
 		],
 	},
