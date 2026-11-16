@@ -17,18 +17,18 @@ Excel の読み込み、検査、日報と集計表の作成は、すべて利�
 
 版の番号は `package.json` が正本なので、ここには書きません。
 
-| 役目 | 使っているもの |
-| --- | --- |
-| 言語 | TypeScript |
-| 画面 | React |
-| 見た目 | Tailwind CSS、shadcn/ui（ボタンだけ）、lucide-react（線のアイコン） |
-| 書体 | Noto Sans JP（Fontsource でページと一緒に置く） |
-| Excel の読み書き | exceljs |
-| 組み立てと開発用のサーバ | Vite |
-| テスト | Vitest |
-| 整形と lint | Biome |
-| Git のフック | lefthook |
-| 公開 | GitHub Actions と GitHub Pages |
+| 役目                     | 使っているもの                                                      |
+| ------------------------ | ------------------------------------------------------------------- |
+| 言語                     | TypeScript                                                          |
+| 画面                     | React                                                               |
+| 見た目                   | Tailwind CSS、shadcn/ui（ボタンだけ）、lucide-react（線のアイコン） |
+| 書体                     | Noto Sans JP（Fontsource でページと一緒に置く）                     |
+| Excel の読み書き         | exceljs                                                             |
+| 組み立てと開発用のサーバ | Vite                                                                |
+| テスト                   | Vitest                                                              |
+| 整形と lint              | Biome                                                               |
+| Git のフック             | lefthook                                                            |
+| 公開                     | GitHub Actions と GitHub Pages                                      |
 
 ## 処理の流れ
 
@@ -61,18 +61,18 @@ flowchart TD
 機能ごとにフォルダを分けています（bulletproof-react の features の分け方）。
 テストは、確かめる対象のファイルの隣に `*.test.ts` として置きます。
 
-| 場所 | 役割 |
-| --- | --- |
-| `src/main.tsx` | 入口。書体とスタイルを読み込み、`App` を描く |
-| `src/app/` | 画面の組み立て。説明のページとアプリの画面を並べ、住所の末尾で切り替える（`use-screen.ts`） |
-| `src/config/` | あちこちで使う定数。出てくるファイルの名前（`files.ts`）、GitHub の説明書などへのリンク（`links.ts`）、説明のページの区画の id（`sections.ts`） |
-| `src/components/` | 機能をまたいで使う画面の部品。上部の帯と足元（`layout/`）、ロゴの印、shadcn/ui から取り込んだ部品（`ui/`） |
-| `src/lib/` | 機能に依らない道具。ファイルのダウンロード、画面の切り替えの決まり（`screen.ts`）、動きを減らす設定の読み取り、クラス名をまとめる `cn` |
+| 場所                         | 役割                                                                                                                                                                                                                                                                                                                         |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/main.tsx`               | 入口。書体とスタイルを読み込み、`App` を描く                                                                                                                                                                                                                                                                                 |
+| `src/app/`                   | 画面の組み立て。説明のページとアプリの画面を並べ、住所の末尾で切り替える（`use-screen.ts`）                                                                                                                                                                                                                                  |
+| `src/config/`                | あちこちで使う定数。出てくるファイルの名前（`files.ts`）、GitHub の説明書などへのリンク（`links.ts`）、説明のページの区画の id（`sections.ts`）                                                                                                                                                                              |
+| `src/components/`            | 機能をまたいで使う画面の部品。上部の帯と足元（`layout/`）、ロゴの印、shadcn/ui から取り込んだ部品（`ui/`）                                                                                                                                                                                                                   |
+| `src/lib/`                   | 機能に依らない道具。ファイルのダウンロード、画面の切り替えの決まり（`screen.ts`）、動きを減らす設定の読み取り、クラス名をまとめる `cn`                                                                                                                                                                                       |
 | `src/features/daily-report/` | 処理（画面を持たない）。`excel/`（Excel の読み書きと印刷の書式）、`input/`（見出しの探し方・値の読み方・行の読み込み）、`checks/`（検査。1つの種類を1ファイルにし、`index.ts` がまとめて走らせる）、`outputs/`（要確認.xlsx・日報・集計表と、作業時間・並び順）、`sample/`（見本の日報）、`testing/`（テストだけで使う道具） |
-| `src/features/landing/` | 説明のページ。`landing-page.tsx` が区画を並べ、区画ごとの部品は `components/` |
-| `src/features/try/` | アプリの画面（見本で試す）。状態の移り変わり（`flow.ts`）、操作をまとめるフック（`hooks/`）、状態と操作を配る context（`try-flow-context.tsx`）、手順ごとの部品（`components/`） |
-| `public/` | ブラウザのタブのアイコン |
-| `docs/images/` | README・説明書・ページで使う画面写真 |
+| `src/features/landing/`      | 説明のページ。`landing-page.tsx` が区画を並べ、区画ごとの部品は `components/`                                                                                                                                                                                                                                                |
+| `src/features/try/`          | アプリの画面（見本で試す）。状態の移り変わり（`flow.ts`）、操作をまとめるフック（`hooks/`）、状態と操作を配る context（`try-flow-context.tsx`）、手順ごとの部品（`components/`）                                                                                                                                             |
+| `public/`                    | ブラウザのタブのアイコン                                                                                                                                                                                                                                                                                                     |
+| `docs/images/`               | README・説明書・ページで使う画面写真                                                                                                                                                                                                                                                                                         |
 
 ファイル名はすべてケバブケースにし、部品の名前（`TryPage` など）はパスカルケースにします。
 読み込みは、フォルダをまたぐときは `@/` から書き、同じフォルダの中は `./` で書きます。

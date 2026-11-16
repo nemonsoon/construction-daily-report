@@ -24,13 +24,13 @@ lefthook は `pnpm install` のときに自分でフックを入れないよう�
 
 コマンドの中身は `package.json` の `scripts` が正本です。
 
-| コマンド | すること |
-| --- | --- |
-| `pnpm dev` | 開発用のサーバを起動する。表示された住所をブラウザで開く |
-| `pnpm test` | テストを走らせる |
-| `pnpm typecheck` | 型を確かめる |
-| `pnpm lint` | 整形と lint を確かめる |
-| `pnpm build` | 型を確かめたうえで、公開するファイルを `dist/` に作る |
+| コマンド         | すること                                                 |
+| ---------------- | -------------------------------------------------------- |
+| `pnpm dev`       | 開発用のサーバを起動する。表示された住所をブラウザで開く |
+| `pnpm test`      | テストを走らせる                                         |
+| `pnpm typecheck` | 型を確かめる                                             |
+| `pnpm lint`      | 整形と lint を確かめる                                   |
+| `pnpm build`     | 型を確かめたうえで、公開するファイルを `dist/` に作る    |
 
 型を確かめるときは `pnpm typecheck` を使います。
 `tsc -b` を直接走らせると、git で管理しない `tsconfig.tsbuildinfo` ができます。
